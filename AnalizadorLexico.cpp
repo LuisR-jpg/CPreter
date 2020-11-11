@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <fstream>
 using namespace std;
 class AnalizadorLexicoV2
 {
@@ -99,10 +100,21 @@ class AnalizadorLexicoV2
             }
         }
 };
-
+string read(){
+    ifstream file;
+    string a, b;
+    file.open("in.cpr", ios::in);
+    if(file.fail()) cout << "agh, chale"; //Handle exception
+    while(!file.eof()) getline(file, a), a += "\n", b += a;
+    return b;
+}
+    
 int main()
 {
-    AnalizadorLexicoV2 a("    dd variable1=35.4\nds variable2\nvariable2=\"hola\"\nsi variable1<=variable2\n'c' 30 true false && / (");//("    db\ndi")
+    string s = read();
+    cout << s << endl;
+    AnalizadorLexicoV2 a(s);
+    //AnalizadorLexicoV2 a("    dd variable1=35.4\nds variable2\nvariable2=\"hola\"\nsi variable1<=variable2\n'c' 30 true false && / (");//("    db\ndi")
     for(int i = 0; i < a.token.size(); i++)
         cout << a.token[i].first << " " << a.token[i].second << endl;
     return 0;
