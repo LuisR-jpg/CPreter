@@ -2,19 +2,20 @@
 #include <vector>
 #include <set>
 #include <fstream>
+#include "Read.h"
 using namespace std;
-class AnalizadorLexicoV2
+class AnalizadorLexico
 {
     public:
         string code;
         vector<pair<string,int>> token;
         set<string> type;
         set<string> instruction;
-        AnalizadorLexicoV2()
+        AnalizadorLexico()
         {
             this -> code = "";
         }
-        AnalizadorLexicoV2(string code)
+        AnalizadorLexico(string code)
         {
             this -> code = code;
             fillSet();
@@ -105,22 +106,11 @@ class AnalizadorLexicoV2
             }
         }
 };
-
-string read()
-{
-    ifstream file;
-    string a, b;
-    file.open("in.cpr", ios::in);
-    if(file.fail()) cout << "agh, chale"; //Handle exception
-    while(!file.eof()) getline(file, a), a += "\n", b += a;
-    return b;
-}
-
 int main()
 {
-    string s = read();
-    cout << s << endl;
-    AnalizadorLexicoV2 a(s);
+    Read r;
+    string s = r.getCode();
+    AnalizadorLexico a(s);
     //AnalizadorLexicoV2 a("    dd variable1=35.4\nds variable2\nvariable2=\"hola\"\nsi variable1<=variable2\n'c' 30 true false && / (");//("    db\ndi")
     cout << endl;
     for(int i = 0; i < a.token.size(); i++)
