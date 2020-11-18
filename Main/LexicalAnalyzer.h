@@ -13,7 +13,8 @@ class AnalizadorLexico
         set<string> instruction;
         AnalizadorLexico()
         {
-            this -> code = "";
+	  Read r;
+	  AnalizadorLexico(r.getCode());
         }
         AnalizadorLexico(string code)
         {
@@ -104,8 +105,15 @@ class AnalizadorLexico
                 if(code[i] == '\n') token.push_back(make_pair("\\n",61));//61 = \n (salto de línea)
                 esp = 0;
             }
+	    
+    for(int i = 0; i < token.size(); i++)
+        cout << token[i].first << " " << token[i].second << endl;
         }
+    vector<pair<string, int>> getToken(){
+      return token;
+    }
 };
+/*
 int main()
 {
     Read r;
@@ -117,10 +125,4 @@ int main()
         cout << a.token[i].first << " " << a.token[i].second << endl;
     return 0;
 }
-/*
-Archivos separados
-Archivo por clase, para cada instrucción
-1. Hacer clases
-2. Analizador sintáctico (token por token)
-3. Vector con tokens?
 */
