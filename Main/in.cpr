@@ -1,6 +1,7 @@
 init
 di main
 dll a, b
+a = 5*12+(25-12/3)
 fr a, b
 fp a, b
 por favor
