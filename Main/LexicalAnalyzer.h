@@ -15,20 +15,12 @@ class AnalizadorLexico
         {
 	  Read r;
 	  code = r.getCode();
-	  //AnalizadorLexico(r.getCode());
         }
 	vector<pair<string, int>> getToken(){
 	  fillSet();
 	  tokens(code);
 	  return token;
     	}
-        /*AnalizadorLexico(string code)
-        {
-            this -> code = code;
-            fillSet();
-            tokens(code);
-        }
-	*/
         void fillSet()
         {
             vector<string> tipo = {"dv", "db", "dll", "dl", "di", "df", "dd", "dc", "ds"};
@@ -112,23 +104,5 @@ class AnalizadorLexico
                 if(code[i] == '\n') token.push_back(make_pair("\\n",61));//61 = \n (salto de línea)
                 esp = 0;
             }
-	    
-    for(int i = 0; i < token.size(); i++)
-        cout << token[i].first << " " << token[i].second << endl;
-    
-    cout << token.size();
         }
 };
-/*
-int main()
-{
-    Read r;
-    string s = r.getCode();
-    AnalizadorLexico a(s);
-    //AnalizadorLexicoV2 a("    dd variable1=35.4\nds variable2\nvariable2=\"hola\"\nsi variable1<=variable2\n'c' 30 true false && / (");//("    db\ndi")
-    cout << endl;
-    for(int i = 0; i < a.token.size(); i++)
-        cout << a.token[i].first << " " << a.token[i].second << endl;
-    return 0;
-}
-*/
