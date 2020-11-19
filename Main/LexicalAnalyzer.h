@@ -14,14 +14,21 @@ class AnalizadorLexico
         AnalizadorLexico()
         {
 	  Read r;
-	  AnalizadorLexico(r.getCode());
+	  code = r.getCode();
+	  //AnalizadorLexico(r.getCode());
         }
-        AnalizadorLexico(string code)
+	vector<pair<string, int>> getToken(){
+	  fillSet();
+	  tokens(code);
+	  return token;
+    	}
+        /*AnalizadorLexico(string code)
         {
             this -> code = code;
             fillSet();
             tokens(code);
         }
+	*/
         void fillSet()
         {
             vector<string> tipo = {"dv", "db", "dll", "dl", "di", "df", "dd", "dc", "ds"};
@@ -108,10 +115,9 @@ class AnalizadorLexico
 	    
     for(int i = 0; i < token.size(); i++)
         cout << token[i].first << " " << token[i].second << endl;
+    
+    cout << token.size();
         }
-    vector<pair<string, int>> getToken(){
-      return token;
-    }
 };
 /*
 int main()
