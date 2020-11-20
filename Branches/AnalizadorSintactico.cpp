@@ -185,10 +185,31 @@ class cw:public Instruction
 {
     public:
         //Expresion expresion;
-        vector<string> instructions;
+        vector<string> t_expresion;
+        vector<Instruction> instructions_cw;
+        cw()
+        {
+
+        }
+        void insert_expresion(vector<string> t_expresion)
+        {
+            this -> t_expresion = t_expresion;
+            //this -> expresion = Expresion(t_expresion);
+        }
+        void insert_instruction_cw(vector<Instruction> instructions_cw)
+        {
+            this -> instructions_cw = instructions_cw;
+        }
         void run()
         {
             return;
+        }
+        friend ostream& operator<<(ostream& output, cw& w)
+        {
+            output << "cw ";
+            for(int i = 0; i<w.t_expresion.size(); i++)
+                output << w.t_expresion[i];
+            return output;
         }
 };
 
@@ -198,6 +219,7 @@ class SyntacticAnalyzer
         AnalizadorLexico a;
         vector<pair<string,int>> tokens;
         vector<Instruction> instruction;
+        int con = 0;
         SyntacticAnalyzer()
         {
             this -> tokens = a.getToken();
@@ -207,80 +229,139 @@ class SyntacticAnalyzer
         {
             vector<Instruction> instruction;
             pair<string, int> last;
-            for(int i = 0; i < tokens.size(); i++)///En otra función, recursiva.
+            int indent = 0;
+            for(int i = 0; i < tokens.size(); i++)
             {
-                //cout << tokens[i].first << " " << tokens[i].second << endl;
-                if((tokens[i].second == 10 && tokens[i+1].second == 0) || (tokens[i].first == "," && last.second == 10))///Declaration
+                con = i;
+                //cout << i << " " << tokens[i].first << " " << tokens[i].second << endl;
+                if(tokens[i].second == 60 || tokens[i].second == 61)
                 {
-                    //cout << tokens[i].first << " " << tokens[i+1].first << endl;
-                    Declaration d;
-                    if(tokens[i].second == 10) last = tokens[i];
-                    if(tokens[i].second == 10) d.insert(tokens[i].first,tokens[i+1].first);
-                    else d.insert(last.first,tokens[i+1].first);
-                    cout << d << endl;
-                    instruction.push_back(d);
-                    i++;
+                    if(tokens[i].second == 61) indent = 0;
+                    if(tokens[i].second == 60) indent++;
+                    continue;
                 }
-
-                if(tokens[i].first == "=")///Assignment
+                if(indent == indentation)
                 {
-                    vector<string> t_expresion;
-                    string name;
-                    Assignment a;
-                    if(tokens[i-1].second == 0) name = tokens[i-1].first;
-                    else
+                    if((tokens[i].second == 10 && tokens[i+1].second == 0) || (tokens[i].first == "," && last.second == 10))///Declaration
                     {
-                        cout << "Error" << endl;
-                        return instruction;///Quitar/Cambiar
+                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
+                        Declaration d;
+                        if(tokens[i].second == 10) last = tokens[i];
+                        if(tokens[i].second == 10) d.insert(tokens[i].first,tokens[i+1].first);
+                        else d.insert(last.first,tokens[i+1].first);
+                        cout << d << endl;
+                        instruction.push_back(d);
+                        i++;
                     }
-                    while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                        t_expresion.push_back(tokens[i+1].first),i++;
-                    a.insert(name,t_expresion);
-                    cout << a << endl;
-                    instruction.push_back(a);
+
+                    if(tokens[i].first == "=")///Assignment
+                    {
+                        vector<string> t_expresion;
+                        string name;
+                        Assignment a;
+                        if(tokens[i-1].second == 0) name = tokens[i-1].first;
+                        else
+                        {
+                            cout << "Error" << endl;
+                            return instruction;///Quitar/Cambiar
+                        }
+                        while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
+                            t_expresion.push_back(tokens[i+1].first),i++;
+                        a.insert(name,t_expresion);
+                        cout << a << endl;
+                        instruction.push_back(a);
+                    }
+
+                    if((tokens[i].first == "fr" && tokens[i+1].second == 0) || (tokens[i].first == "," && last.first == "fr"))///Read
+                    {
+                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
+                        fr r;
+                        if(tokens[i].second == 20) last = tokens[i];
+                        r.insert(tokens[i+1].first);
+                        cout << r << endl;
+                        i++;
+                        instruction.push_back(r);
+                    }
+
+                    if(tokens[i].first == "fp" || (tokens[i].first == "," && last.first == "fp"))///Print
+                    {
+                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
+                        vector<string> t_expresion;
+                        fp p;
+                        if(tokens[i].second == 20) last = tokens[i];
+                        while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
+                            t_expresion.push_back(tokens[i+1].first),i++;
+                        p.insert(t_expresion);
+                        cout << p << endl;
+                        instruction.push_back(p);
+                    }
+
+                    if(tokens[i].first == "si")///If
+                    {
+                        si sif;
+                        vector<string> t_expresion;
+                        while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
+                            t_expresion.push_back(tokens[i+1].first),i++;
+                        sif.insert_expresion(t_expresion);
+                        cout << sif << endl;
+                        //
+                        vector<pair<string,int>> tokens_i;
+                        tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                        con = 0;
+                        //cout << endl << i+1 << " " << tokens[i+1].first << endl;
+                        sif.insert_instruction_si(instructions(tokens_i,indentation+1));
+                        i += con + 1;
+                        con = 0;
+                        //cout << endl << i << " " << tokens[i].first << endl;
+
+                        if(tokens[i].first == "se")
+                        {
+                            tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                            con = 0;
+                            //cout << endl << i+1 << " " << tokens[i+1].first << endl;
+                            sif.insert_instruction_se(instructions(tokens_i,indentation+1));
+                            i += con;
+                            con = 0;
+                            //cout << endl << i << " " << tokens[i].first << endl;
+                        }
+                        /*cout << endl;
+                        for(int j = 0; j < tokens_i.size(); j++)
+                            cout << tokens_i[j].first << " " << tokens_i[j].second << endl;
+                        cout << endl;*/
+                        //if(tokens[i].first == "se") cout << "hola";
+                    }
+
+                    if(tokens[i].first == "cf")
+                    {
+
+                    }
+
+                    if(tokens[i].first == "cw")///While
+                    {
+                        cw w;
+                        vector<string> t_expresion;
+                        while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
+                            t_expresion.push_back(tokens[i+1].first),i++;
+                        w.insert_expresion(t_expresion);
+                        cout << w << endl;
+                        //
+                        vector<pair<string,int>> tokens_i;
+                        tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                        con = 0;
+                        //cout << endl << i+1 << " " << tokens[i+1].first << endl;
+                        w.insert_instruction_cw(instructions(tokens_i,indentation+1));
+                        i += con;
+                        con = 0;
+                    }
                 }
-
-                if((tokens[i].first == "fr" && tokens[i+1].second == 0) || (tokens[i].first == "," && last.first == "fr"))///Read
+                else if(indent > indentation)
                 {
-                    //cout << tokens[i].first << " " << tokens[i+1].first << endl;
-                    fr r;
-                    if(tokens[i].second == 20) last = tokens[i];
-                    r.insert(tokens[i+1].first);
-                    cout << r << endl;
-                    i++;
-                    instruction.push_back(r);
+                    cout << "Error" << endl;
+                    return instruction;
                 }
-
-                if(tokens[i].first == "fp" || (tokens[i].first == "," && last.first == "fp"))///Print
+                else
                 {
-                    //cout << tokens[i].first << " " << tokens[i+1].first << endl;
-                    vector<string> t_expresion;
-                    fp p;
-                    if(tokens[i].second == 20) last = tokens[i];
-                    while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                        t_expresion.push_back(tokens[i+1].first),i++;
-                    p.insert(t_expresion);
-                    cout << p << endl;
-                    instruction.push_back(p);
-                }
-
-                if(tokens[i].first == "si")
-                {
-                    si sif;
-                    vector<string> t_expresion;
-                    while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                        t_expresion.push_back(tokens[i+1].first),i++;
-                    sif.insert_expresion(t_expresion);
-                    cout << sif << endl;
-                    //
-                    vector<pair<string,int>> tokens_i;
-                    tokens_i.assign(tokens.begin()+(i+1),tokens.end());
-
-                    /*cout << endl;
-                    for(int j = 0; j < tokens_i.size(); j++)
-                        cout << tokens_i[j].first << " " << tokens_i[j].second << endl;
-                    cout << endl;*/
-                    //if(tokens[i].first == "se") cout << "hola";
+                    return instruction;
                 }
             }
             return instruction;
@@ -291,8 +372,8 @@ int main()
 {
     SyntacticAnalyzer s;
     cout << endl;
-    for(int i = 0; i < s.tokens.size(); i++)
-        cout << s.tokens[i].first << " " << s.tokens[i].second << endl;
+    //for(int i = 0; i < s.tokens.size(); i++)
+        //cout << i << " " << s.tokens[i].first << " " << s.tokens[i].second << endl;
     //for(int i = 0; i < s.instruction.size(); i++)
         //cout << s.instruction[i] << endl;
     return 0;
