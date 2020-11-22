@@ -14,6 +14,7 @@ class Instruction
         {
             return;
         }
+        virtual void print() = 0;
 };
 
 class Declaration:public Instruction
@@ -26,11 +27,11 @@ class Declaration:public Instruction
             this -> name = "";
             this -> type = "";
         }
-        /*Declaration(string name, string type)
+        Declaration(string name, string type)
         {
             this -> name = name;
             this -> type = type;
-        }*/
+        }
         void insert(string name, string type)
         {
             this -> name = name;
@@ -39,6 +40,10 @@ class Declaration:public Instruction
         void run()
         {
             return;
+        }
+        void print()
+        {
+            cout << name << " " << type;
         }
         friend ostream& operator<<(ostream& output, Declaration& d)
         {
@@ -67,6 +72,12 @@ class Assignment:public Instruction
         {
             return;
         }
+        void print()
+        {
+            cout << name << " = ";
+            for(int i = 0; i<t_expresion.size(); i++)
+                cout << t_expresion[i];
+        }
         friend ostream& operator<<(ostream& output, Assignment& a)
         {
             output << a.name << " = ";
@@ -93,6 +104,10 @@ class fp:public Instruction
         void run()
         {
             return;
+        }
+        void print()
+        {
+            //cout << name << " " << type;
         }
         friend ostream& operator<<(ostream& output, fp& p)
         {
@@ -123,6 +138,10 @@ class fr:public Instruction
         {
             return;
         }
+        void print()
+        {
+            //cout << name << " " << type;
+        }
         friend ostream& operator<<(ostream& output, fr& r)
         {
             output << "fr " << r.name;
@@ -135,22 +154,29 @@ class si:public Instruction
     public:
         //Expresion expresion;
         vector<string> t_expresion;
-        vector<Instruction> instructions_si;
-        vector<Instruction> instructions_se;
+        vector<Instruction*> instructions_si;
+        vector<Instruction*> instructions_se;
         si()
         {
 
+        }
+        ~si()
+        {
+            /*for(int i=0;i<instructions_si.size();i++)
+                delete instructions_si[i];
+            for(int i=0;i<instructions_se.size();i++)
+                delete instructions_se[i];*/
         }
         void insert_expresion(vector<string> t_expresion)
         {
             this -> t_expresion = t_expresion;
             //this -> expresion = Expresion(t_expresion);
         }
-        void insert_instruction_si(vector<Instruction> instructions_si)
+        void insert_instruction_si(vector<Instruction*> instructions_si)
         {
             this -> instructions_si = instructions_si;
         }
-        void insert_instruction_se(vector<Instruction> instructions_se)
+        void insert_instruction_se(vector<Instruction*> instructions_se)
         {
             this -> instructions_se = instructions_se;
         }
@@ -158,11 +184,17 @@ class si:public Instruction
         {
             return;
         }
+        /*void print()
+        {
+            for(int i = 0; i < instructions_si.size(); i++)
+                instructions_si[i]->print(), cout << endl;
+        }*/
         friend ostream& operator<<(ostream& output, si& s)
         {
-            output << "si ";
+            output << "si [";
             for(int i = 0; i<s.t_expresion.size(); i++)
-                output << s.t_expresion[i];
+                output << s.t_expresion[i] << ",";
+            output << "]";
             return output;
         }
 };
@@ -178,6 +210,10 @@ class cf:public Instruction
         void run()
         {
             return;
+        }
+        void print()
+        {
+            //cout << name << " " << type;
         }
 };
 
@@ -204,6 +240,10 @@ class cw:public Instruction
         {
             return;
         }
+        void print()
+        {
+            //cout << name << " " << type;
+        }
         friend ostream& operator<<(ostream& output, cw& w)
         {
             output << "cw ";
@@ -218,16 +258,21 @@ class SyntacticAnalyzer
     public:
         AnalizadorLexico a;
         vector<pair<string,int>> tokens;
-        vector<Instruction> instruction;
+        vector<Instruction*> instruction;
         int con = 0;
         SyntacticAnalyzer()
         {
             this -> tokens = a.getToken();
             this -> instruction = instructions(tokens, 0);
         }
-        vector<Instruction> instructions(vector<pair<string,int>> tokens, int indentation)
+        ~SyntacticAnalyzer()
         {
-            vector<Instruction> instruction;
+            for(int i=0;i<instruction.size();i++)
+                delete instruction[i];
+        }
+        vector<Instruction*> instructions(vector<pair<string,int>> tokens, int indentation)
+        {
+            vector<Instruction*> instruction;
             pair<string, int> last;
             int indent = 0;
             for(int i = 0; i < tokens.size(); i++)
@@ -245,11 +290,15 @@ class SyntacticAnalyzer
                     if((tokens[i].second == 10 && tokens[i+1].second == 0) || (tokens[i].first == "," && last.second == 10))///Declaration
                     {
                         //cout << tokens[i].first << " " << tokens[i+1].first << endl;
-                        Declaration d;
+                        Declaration* d = new Declaration;
                         if(tokens[i].second == 10) last = tokens[i];
-                        if(tokens[i].second == 10) d.insert(tokens[i].first,tokens[i+1].first);
-                        else d.insert(last.first,tokens[i+1].first);
-                        cout << d << endl;
+                        if(tokens[i].second == 10) d -> insert(tokens[i].first,tokens[i+1].first);
+                        else d -> insert(last.first,tokens[i+1].first);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
+                        //cout << d << endl;
                         instruction.push_back(d);
                         i++;
                     }
@@ -268,6 +317,10 @@ class SyntacticAnalyzer
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++;
                         a.insert(name,t_expresion);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
                         cout << a << endl;
                         instruction.push_back(a);
                     }
@@ -278,6 +331,10 @@ class SyntacticAnalyzer
                         fr r;
                         if(tokens[i].second == 20) last = tokens[i];
                         r.insert(tokens[i+1].first);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
                         cout << r << endl;
                         i++;
                         instruction.push_back(r);
@@ -292,6 +349,10 @@ class SyntacticAnalyzer
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++;
                         p.insert(t_expresion);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
                         cout << p << endl;
                         instruction.push_back(p);
                     }
@@ -303,6 +364,10 @@ class SyntacticAnalyzer
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++;
                         sif.insert_expresion(t_expresion);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
                         cout << sif << endl;
                         //
                         vector<pair<string,int>> tokens_i;
@@ -327,7 +392,7 @@ class SyntacticAnalyzer
                         /*cout << endl;
                         for(int j = 0; j < tokens_i.size(); j++)
                             cout << tokens_i[j].first << " " << tokens_i[j].second << endl;
-                        cout << endl;*/
+                        cout << endl;
                         //if(tokens[i].first == "se") cout << "hola";
                     }
 
@@ -343,6 +408,10 @@ class SyntacticAnalyzer
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++;
                         w.insert_expresion(t_expresion);
+                        for(int j = 0; j < indentation; j++)
+                        {
+                            cout << "    ";
+                        }
                         cout << w << endl;
                         //
                         vector<pair<string,int>> tokens_i;
@@ -371,10 +440,10 @@ class SyntacticAnalyzer
 int main()
 {
     SyntacticAnalyzer s;
-    cout << endl;
+    cout << "Instrucciones:" << endl;
     //for(int i = 0; i < s.tokens.size(); i++)
         //cout << i << " " << s.tokens[i].first << " " << s.tokens[i].second << endl;
-    //for(int i = 0; i < s.instruction.size(); i++)
-        //cout << s.instruction[i] << endl;
+    for(int i = 0; i < s.instruction.size(); i++)
+        s.instruction[i]->print(), cout << endl;
     return 0;
 }
