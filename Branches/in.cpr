@@ -3,12 +3,18 @@ a = 5*12+(25-12/3)*b
 si a>=b
 	fp "a es mayor o igual a b"
 	fp "hola ", a
-	cw b == 3
-		fp "Anidado"
 se
 	fp "b es mayor a a"
+	cw b == 3
+		fp "Anidado"
+		si b==1
+			fp "Anidado x2"
+		se
+			fp "No sirvo"
+			fp "O si?"
 fr a, b
 fp a+15/9, b
 cw a > 2
 	fp "Esto es un ciclo while"
 	a = a+1
+fp "hola x2"
