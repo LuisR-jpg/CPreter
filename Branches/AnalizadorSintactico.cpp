@@ -311,6 +311,7 @@ class SyntacticAnalyzer
         {
             vector<pair<Instruction*,int>> instruction;
             pair<string, int> last;
+            string last_i;
             int indent = 0;
             for(int i = 0; i < tokens.size(); i++)
             {
@@ -322,8 +323,15 @@ class SyntacticAnalyzer
                     if(tokens[i].second == 60) indent++;
                     continue;
                 }
+                /*if(indentation != 0 && indent == 0)
+                {
+                    con--;
+                    return instruction;
+                }*/
+                //else indent --;
                 if(indent == indentation)
                 {
+                    //cout << indent << " " << indentation << endl;
                     if((tokens[i].second == 10 && tokens[i+1].second == 0) || (tokens[i].first == "," && last.second == 10))///Declaration
                     {
                         //cout << tokens[i].first << " " << tokens[i+1].first << endl;
@@ -332,8 +340,8 @@ class SyntacticAnalyzer
                         if(tokens[i].second == 10) d -> insert(tokens[i].first,tokens[i+1].first);
                         else d -> insert(last.first,tokens[i+1].first);
                         //cout << d << endl;
-                        instruction.push_back(make_pair(d,indentation));
-                        i++;
+                        instruction.push_back(make_pair(d,indent));
+                        i++, con++;
                     }
 
                     if(tokens[i].first == "=")///Assignment
@@ -348,10 +356,10 @@ class SyntacticAnalyzer
                             return instruction;///Quitar/Cambiar
                         }
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                            t_expresion.push_back(tokens[i+1].first),i++;
+                            t_expresion.push_back(tokens[i+1].first),i++, con++;
                         a -> insert(name,t_expresion);
                         //cout << a << endl;
-                        instruction.push_back(make_pair(a,indentation));
+                        instruction.push_back(make_pair(a,indent));
                     }
 
                     if((tokens[i].first == "fr" && tokens[i+1].second == 0) || (tokens[i].first == "," && last.first == "fr"))///Read
@@ -361,8 +369,8 @@ class SyntacticAnalyzer
                         if(tokens[i].second == 20) last = tokens[i];
                         r -> insert(tokens[i+1].first);
                         //cout << r << endl;
-                        i++;
-                        instruction.push_back(make_pair(r,indentation));
+                        i++, con++;
+                        instruction.push_back(make_pair(r,indent));
                     }
 
                     if(tokens[i].first == "fp" || (tokens[i].first == "," && last.first == "fp"))///Print
@@ -372,47 +380,51 @@ class SyntacticAnalyzer
                         fp* p = new fp;
                         if(tokens[i].second == 20) last = tokens[i];
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                            t_expresion.push_back(tokens[i+1].first),i++;
+                            t_expresion.push_back(tokens[i+1].first),i++, con++;
                         p -> insert(t_expresion);
                         //cout << p << endl;
-                        instruction.push_back(make_pair(p,indentation));
+                        instruction.push_back(make_pair(p,indent));
                     }
+
+
+
+
+
+
+
 
                     if(tokens[i].first == "si")///If
                     {
                         si* sif = new si;
                         vector<string> t_expresion;
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                            t_expresion.push_back(tokens[i+1].first),i++;
+                            t_expresion.push_back(tokens[i+1].first), i++, con++;
                         sif -> insert_expresion(t_expresion);
 
                         vector<pair<string,int>> tokens_i;
                         tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                         con = 0;
-                        //cout << endl << i+1 << " " << tokens[i+1].first << endl;
+                        cout << endl << i+1 << " si i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         sif -> insert_instruction_si(instructions(tokens_i,indentation+1));
                         i += con;
                         con = 0;
-                        //cout << endl << i << " " << tokens[i].first << endl;
+                        cout << endl << i+1 << " si f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
 
-                        if(tokens[i].second == 61) i++;
+                        if(tokens[i+1].first == "se") i++, con++;//if(tokens[i].second == 61 || tokens[i].second == 60) i++, con++;
                         if(tokens[i].first == "se")
                         {
                             tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                             con = 0;
-                            //cout << endl << i+1 << " " << tokens[i+1].first << endl;
+                            cout << endl << i+1 << " se i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                             sif -> insert_instruction_se(instructions(tokens_i,indentation+1));
                             i += con;
                             con = 0;
-                            //cout << endl << i << " " << tokens[i].first << endl;
+                            cout << endl << i+1 << " se f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         }
 
-                        instruction.push_back(make_pair(sif,indentation));
-                        /*cout << endl;
-                        for(int j = 0; j < tokens_i.size(); j++)
-                            cout << tokens_i[j].first << " " << tokens_i[j].second << endl;
-                        cout << endl;
-                        //if(tokens[i].first == "se") cout << "hola";*/
+                        instruction.push_back(make_pair(sif,indent));
+                        //if(indentation > 0 && tokens[i].second != 60) return instruction;
+                        if(indentation > 0 && tokens[i].second != 60 && tokens[i+1].second != 60) return instruction;
                     }
 
                     if(tokens[i].first == "cf")
@@ -425,28 +437,42 @@ class SyntacticAnalyzer
                         cw* w = new cw;
                         vector<string> t_expresion;
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
-                            t_expresion.push_back(tokens[i+1].first),i++;
+                            t_expresion.push_back(tokens[i+1].first),i++, con++;
                         w -> insert_expresion(t_expresion);
 
                         vector<pair<string,int>> tokens_i;
                         tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                         con = 0;
-                        //cout << endl << i+1 << " " << tokens[i+1].first << endl;//////////////////////////////
+                        cout << endl << i+1 << " cw i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         w -> insert_instruction_cw(instructions(tokens_i,indentation+1));
                         i += con;
+                        cout << endl << i+1 << " cw f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         con = 0;
 
-                        instruction.push_back(make_pair(w,indentation));
+                        instruction.push_back(make_pair(w,indent));
+                        //if(indentation > 0 && tokens[i].second != 60) return instruction;
+                        if(indentation > 0 && tokens[i].second != 60 && tokens[i+1].second != 60) return instruction;
                     }
-                }////////////////////////////Error con la separación en si, se, cw. Checar.
+                    //indent = 0;
+
+
+
+
+
+
+
+                }////////////////////////////Error con la separación en si, se, cw. Checar. Identación de las anidadas.
                 else if(indent > indentation)
                 {
-                    cout << "Indentation error " << i << " " << tokens[i].first << " " << tokens[i+1].first << endl;
-                    return instruction;
+                    cout << "Indentation error " << i << " " << tokens[i].first << " " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                    //exit(34404);
+                    //return instruction;
                 }
-                else
+                else if(indent < indentation)
                 {
-                    return instruction;
+                    cout << "Aber " << i << " " << indent << " " << tokens[i].first << " " << tokens[i+1].first << endl;
+                    //if(indent == 0)
+                    //return instruction;
                 }
             }
             return instruction;
@@ -460,6 +486,6 @@ int main()
     //for(int i = 0; i < s.tokens.size(); i++)
         //cout << i << " " << s.tokens[i].first << " " << s.tokens[i].second << endl;
     for(int i = 0; i < s.instruction.size(); i++)
-        s.instruction[i].first -> print(), cout << endl;
+        cout << endl << "Instruccion " << i << endl,s.instruction[i].first -> print(), cout << endl;
     return 0;
 }
