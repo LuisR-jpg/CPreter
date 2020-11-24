@@ -1,6 +1,6 @@
 #include "LexicalAnalyzer.h"
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 class Instruction
@@ -461,7 +461,7 @@ class SyntacticAnalyzer
 
 
 
-                }////////////////////////////Error con la separación en si, se, cw. Checar. Identación de las anidadas.
+                }////////////////////////////Error con la separaciï¿½n en si, se, cw. Checar. Identaciï¿½n de las anidadas.
                 else if(indent > indentation)
                 {
                     cout << "Indentation error " << i << " " << tokens[i].first << " " << tokens[i+1].first << " " << indent << " " << indentation << endl;
