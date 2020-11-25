@@ -4,22 +4,23 @@
 #include <fstream>
 #include "Read.h"
 using namespace std;
-class AnalizadorLexico
+class LexicalAnalyzer
 {
     public:
         string code;
         vector<pair<string,int>> token;
         set<string> type;
         set<string> instruction;
-        AnalizadorLexico()
+        LexicalAnalyzer()
         {
-	  Read r;
-	  code = r.getCode();
+            Read r;
+            code = r.getCode();
         }
-	vector<pair<string, int>> getToken(){
-	  fillSet();
-	  tokens(code);
-	  return token;
+        vector<pair<string, int>> getToken()
+        {
+            fillSet();
+            tokens(code);
+            return token;
     	}
         void fillSet()
         {
@@ -67,13 +68,13 @@ class AnalizadorLexico
                         if(code[i] == '.') intodouble = false, pun++;
                         i++;
                     }
-                    if(intodouble && pun == 1) insert(aux, 50);//50 = valor entero
+                    if(!intodouble && pun == 1) insert(aux, 51);//51 = valor decimal
                     else if(pun>1)
                     {
                         cout << "Error" << endl;
                         return;
                     }
-                    else insert(aux, 51);//51 = valor decimal
+                    else insert(aux, 50);//50 = valor entero
                     aux = "";
                 }
                 if(code[i] == '"')
@@ -94,7 +95,7 @@ class AnalizadorLexico
                     if(code[i+1] == '=' || code[i+1] == '|' || code[i+1] == '&' || code[i+1] == '>')
                         aux += code[i], aux += code[i+1], i++;
                     else aux += code[i];
-                    if(aux == "->" || aux == "," || aux == "=") insert(aux,30);//30 = Símbolos especiales
+                    if(aux == "->" || aux == "," || aux == "=" || aux == ":") insert(aux,30);//30 = Símbolos especiales
                     else if(aux == "(" || aux == ")") insert(aux,31);//31 = Símbolos de jerarquía
                     else if(aux == "+" || aux == "-" || aux == "*" || aux == "/") insert(aux,32);//32 = Símbolos de aritmética
                     else if(aux == "<" || aux == ">" || aux[1] == '=') insert(aux,33);//33 = Símbolos relacionales

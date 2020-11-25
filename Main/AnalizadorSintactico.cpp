@@ -1,6 +1,6 @@
 #include "LexicalAnalyzer.h"
-#include <iostream>
-#include <vector>
+#include<iostream>
+#include<vector>
 using namespace std;
 
 class Instruction
@@ -27,12 +27,12 @@ class Declaration:public Instruction
             this -> name = "";
             this -> type = "";
         }
-        Declaration(string name, string type)
+        Declaration(string type, string name)
         {
             this -> name = name;
             this -> type = type;
         }
-        void insert(string name, string type)
+        void insert(string type, string name)
         {
             this -> name = name;
             this -> type = type;
@@ -43,11 +43,11 @@ class Declaration:public Instruction
         }
         void print()
         {
-            cout << name << " " << type;
+            cout << type << " " << name;
         }
         friend ostream& operator<<(ostream& output, Declaration& d)
         {
-            output << d.name << " " << d.type;
+            output << d.type << " " << d.name;
             return output;
         }
 };
@@ -164,10 +164,10 @@ class si:public Instruction
         }
         ~si()
         {
-            /*for(int i=0;i<instructions_si.size();i++)
-                delete instructions_si[i];
+            for(int i=0;i<instructions_si.size();i++)
+                delete instructions_si[i].first;
             for(int i=0;i<instructions_se.size();i++)
-                delete instructions_se[i];*/
+                delete instructions_se[i].first;
         }
         void insert_expresion(vector<string> t_expresion)
         {
@@ -229,14 +229,32 @@ class cf:public Instruction
         int inital_value;
         int final_value;
         int increment;
-        vector<Instruction> instruction;
+        vector<pair<Instruction*,int>> instructions_cf;
         void run()
         {
             return;
         }
+        void insert(string name,int final_value,int inital_value = 0,int increment = 1)
+        {
+            this -> name = name;
+            this -> inital_value = inital_value;
+            this -> final_value = final_value;
+            this -> increment = increment;
+        }
+        void insert_instruction_cf(vector<pair<Instruction*,int>> instructions_cf)
+        {
+            this -> instructions_cf = instructions_cf;
+        }
         void print()
         {
-            //cout << name << " " << type;
+            cout << "cf n = " << inital_value << ", n <= " << final_value << ", n+= " << increment;
+            cout << endl;
+            for(int i = 0; i<instructions_cf.size(); i++)
+            {
+                for(int j = 0; j < instructions_cf[i].second; j++)
+                    cout << "    ";
+                instructions_cf[i].first -> print(), (i != instructions_cf.size() - 1 ? cout << endl : cout << "");
+            }
         }
 };
 
@@ -249,6 +267,11 @@ class cw:public Instruction
         cw()
         {
 
+        }
+        ~cw()
+        {
+            for(int i=0;i<instructions_cw.size();i++)
+                delete instructions_cw[i].first;
         }
         void insert_expresion(vector<string> t_expresion)
         {
@@ -285,15 +308,10 @@ class cw:public Instruction
         }
 };
 
-/*for(int j = 0; j < indentation; j++)
-{
-    cout << "    ";
-}*/
-
 class SyntacticAnalyzer
 {
     public:
-        AnalizadorLexico a;
+        LexicalAnalyzer a;
         vector<pair<string,int>> tokens;
         vector<pair<Instruction*,int>> instruction;
         int con = 0;
@@ -323,23 +341,15 @@ class SyntacticAnalyzer
                     if(tokens[i].second == 60) indent++;
                     continue;
                 }
-                /*if(indentation != 0 && indent == 0)
-                {
-                    con--;
-                    return instruction;
-                }*/
-                //else indent --;
                 if(indent == indentation)
                 {
                     //cout << indent << " " << indentation << endl;
                     if((tokens[i].second == 10 && tokens[i+1].second == 0) || (tokens[i].first == "," && last.second == 10))///Declaration
                     {
-                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
                         Declaration* d = new Declaration;
                         if(tokens[i].second == 10) last = tokens[i];
                         if(tokens[i].second == 10) d -> insert(tokens[i].first,tokens[i+1].first);
                         else d -> insert(last.first,tokens[i+1].first);
-                        //cout << d << endl;
                         instruction.push_back(make_pair(d,indent));
                         i++, con++;
                     }
@@ -352,37 +362,32 @@ class SyntacticAnalyzer
                         if(tokens[i-1].second == 0) name = tokens[i-1].first;
                         else
                         {
-                            cout << "Error" << endl;
-                            return instruction;///Quitar/Cambiar
+                            cout << "Assignment Error" << endl;
+                            exit(34404);
                         }
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++, con++;
                         a -> insert(name,t_expresion);
-                        //cout << a << endl;
                         instruction.push_back(make_pair(a,indent));
                     }
 
                     if((tokens[i].first == "fr" && tokens[i+1].second == 0) || (tokens[i].first == "," && last.first == "fr"))///Read
                     {
-                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
                         fr* r = new fr;
                         if(tokens[i].second == 20) last = tokens[i];
                         r -> insert(tokens[i+1].first);
-                        //cout << r << endl;
                         i++, con++;
                         instruction.push_back(make_pair(r,indent));
                     }
 
                     if(tokens[i].first == "fp" || (tokens[i].first == "," && last.first == "fp"))///Print
                     {
-                        //cout << tokens[i].first << " " << tokens[i+1].first << endl;
                         vector<string> t_expresion;
                         fp* p = new fp;
                         if(tokens[i].second == 20) last = tokens[i];
                         while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
                             t_expresion.push_back(tokens[i+1].first),i++, con++;
                         p -> insert(t_expresion);
-                        //cout << p << endl;
                         instruction.push_back(make_pair(p,indent));
                     }
 
@@ -404,33 +409,86 @@ class SyntacticAnalyzer
                         vector<pair<string,int>> tokens_i;
                         tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                         con = 0;
-                        cout << endl << i+1 << " si i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        //cout << endl << i+1 << " si i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         sif -> insert_instruction_si(instructions(tokens_i,indentation+1));
                         i += con;
                         con = 0;
-                        cout << endl << i+1 << " si f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        //cout << endl << i+1 << " si f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
 
                         if(tokens[i+1].first == "se") i++, con++;//if(tokens[i].second == 61 || tokens[i].second == 60) i++, con++;
                         if(tokens[i].first == "se")
                         {
                             tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                             con = 0;
-                            cout << endl << i+1 << " se i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                            //cout << endl << i+1 << " se i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                             sif -> insert_instruction_se(instructions(tokens_i,indentation+1));
                             i += con;
                             con = 0;
-                            cout << endl << i+1 << " se f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                            //cout << endl << i+1 << " se f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         }
 
                         instruction.push_back(make_pair(sif,indent));
-                        //if(indentation > 0 && tokens[i].second != 60) return instruction;
-                        if(indentation > 0 && tokens[i].second != 60 && tokens[i+1].second != 60) return instruction;
+                        if(indentation > 0 && indent == 0) return instruction;
+                        //if(indentation > 0) return instruction;
                     }
 
-                    if(tokens[i].first == "cf")
+
+                    //cout << tokens[i].first << " " << tokens[i+1].second  << " " <<  tokens[i+2].first  << " " << tokens[i+3].second  << " " <<  tokens[i+3].second  << endl;
+                    if(tokens[i].first == "cf" && tokens[i+1].second == 00 && tokens[i+2].first == ":" && (tokens[i+3].second == 00 || tokens[i+3].second == 50 || tokens[i+3].second == 51))///For
                     {
+                        if(tokens[i+3].second == 51) cout << "Value error" << endl, exit(34404);
 
+                        int aux = 0, val;
+                        int initial_value, final_value, increment;
+                        string values[3] = {tokens[i+3].first,"0","1"};
+
+                        Declaration* d = new Declaration;
+                        d -> insert("di",tokens[i+1].first);
+                        instruction.push_back(make_pair(d,indent));
+
+                        if(tokens[i+4].first == ",")
+                        {
+                            while(tokens[i+4+aux+1].second != 61)
+                            {
+                                if(aux == 2) values[1] = tokens[i+4+aux].first;
+                                if(aux == 4) values[2] = tokens[i+4+aux].first;
+                                aux++;
+                            }
+                        }
+
+                        for(int j = 0; j<3; j++)
+                        {
+                            //cout << values[j][0] << endl;
+                            if(isdigit(values[j][0])) val = stoi(values[j]);
+                            else val = 0;//Si es variable, obtener su valor de la tabla de símbolos
+                            if(j == 0) initial_value = val;
+                            if(j == 1) final_value = val;
+                            if(j == 2) increment = val;
+                        }
+
+                        if(aux%2 == 1) cout << "Instruction error" << endl, exit(34404);
+
+                        cf* f = new cf;
+                        f -> insert(tokens[i+1].first,initial_value,final_value,increment);
+                        i += 3 + aux;
+
+                        vector<pair<string,int>> tokens_i;
+                        tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                        con = 0;
+                        //cout << endl << i+1 << " cf i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        f -> insert_instruction_cf(instructions(tokens_i,indentation+1));
+                        i += con;
+                        //cout << endl << i+1 << " cf f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        con = 0;
+
+                        //Si se intentan declarar dos variables con el mismo nombre = error
+                        instruction.push_back(make_pair(f,indent));
+                        if(indentation > 0 && indent == 0) return instruction;
+                        //if(indentation > 0) return instruction;
                     }
+                    //else cout << tokens[i].first << " " << tokens[i+1].first  << " " <<  tokens[i+2].first  << " " << tokens[i+3].first  << " " <<  tokens[i+3].first  << endl, exit(34404);//cout << "Instruction error 2" << endl, exit(34404);
+
+
 
                     if(tokens[i].first == "cw")///While
                     {
@@ -443,17 +501,16 @@ class SyntacticAnalyzer
                         vector<pair<string,int>> tokens_i;
                         tokens_i.assign(tokens.begin()+(i+1),tokens.end());
                         con = 0;
-                        cout << endl << i+1 << " cw i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        //cout << endl << i+1 << " cw i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         w -> insert_instruction_cw(instructions(tokens_i,indentation+1));
                         i += con;
-                        cout << endl << i+1 << " cw f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        //cout << endl << i+1 << " cw f " << tokens[i+1].first << " " << indent << " " << indentation << endl;
                         con = 0;
 
                         instruction.push_back(make_pair(w,indent));
-                        //if(indentation > 0 && tokens[i].second != 60) return instruction;
-                        if(indentation > 0 && tokens[i].second != 60 && tokens[i+1].second != 60) return instruction;
+                        if(indentation > 0 && indent == 0) return instruction;
+                        //if(indentation > 0) return instruction;
                     }
-                    //indent = 0;
 
 
 
@@ -461,19 +518,9 @@ class SyntacticAnalyzer
 
 
 
-                }////////////////////////////Error con la separaciï¿½n en si, se, cw. Checar. Identaciï¿½n de las anidadas.
-                else if(indent > indentation)
-                {
-                    cout << "Indentation error " << i << " " << tokens[i].first << " " << tokens[i+1].first << " " << indent << " " << indentation << endl;
-                    //exit(34404);
-                    //return instruction;
-                }
-                else if(indent < indentation)
-                {
-                    cout << "Aber " << i << " " << indent << " " << tokens[i].first << " " << tokens[i+1].first << endl;
-                    //if(indent == 0)
-                    return instruction;
-                }
+                }////////////////////////////Error con la separación en si, se, cw. Checar.
+                //else if(indent > indentation) cout << "Indentation error" << endl, exit(34404);
+                else if(indent < indentation) return instruction;
             }
             return instruction;
         }
@@ -483,9 +530,10 @@ int main()
 {
     SyntacticAnalyzer s;
     cout << "Instrucciones:" << endl;
-    //for(int i = 0; i < s.tokens.size(); i++)
-        //cout << i << " " << s.tokens[i].first << " " << s.tokens[i].second << endl;
+    /*for(int i = 0; i < s.tokens.size(); i++)
+        cout << s.tokens[i].first << " " << s.tokens[i].second << endl;*/
     for(int i = 0; i < s.instruction.size(); i++)
-        cout << endl << "Instruccion " << i << endl,s.instruction[i].first -> print(), cout << endl;
+        //cout << endl << "Instruccion " << i << endl,s.instruction[i].first -> print(), cout << endl;
+        s.instruction[i].first -> print(), cout << endl;
     return 0;
 }
