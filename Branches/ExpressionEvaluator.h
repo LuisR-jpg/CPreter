@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <vector>
 using namespace std;
 class Evaluator{
   public: 
@@ -8,13 +7,39 @@ class Evaluator{
         string symbol;
         Operator(string symbol): symbol(symbol){}
         ~Operator(){}
+	bool operator >= (const Operator &o){
+	}
+	bool operator == (const Operator &o){
+	  return symbol == o.symbol;
+	}
+	bool operator != (const Operator &o){
+	  return symbol != o.symbol;
+	}
     };
     vector<pair<string, int>> expression;
-    Evaluator(vector<pair<string, int>> expression): expression(expression){}
+    map<Operator, int> priority;
+    Evaluator(vector<pair<string, int>> expression): expression(expression){
+      vector<vector<Operator>> priorityTable 
+      {
+	{"&&"},	{"||"},	{"!"},
+	{">=", "<=", ">", "<", "==", "!="},
+	{"+","-"}, {"*","/"}, {"(",")"}
+      };
+      for(int i = 0; i < priorityTable.size(); i++){
+	cout << i << ":\t";
+	for(int j = 0; j < priorityTable[i].size(); j++){
+	  cout << priorityTable[i][j] << " ";
+	}
+	cout << endl;
+      }
+    }
+    ~Evaluator(){}
     double evaluate()
     {
+/*
       for(auto i: expression)
       {
+	Operator op(i.first);
         if(i.second == 10) out.push(i);
 	else if(sta.size() && sta.front() != "(")
 	{
@@ -35,6 +60,7 @@ class Evaluator{
 	out.push(sta.pop());
       }
       while(out.size()) cout << out.pop().first << " ";
+*/
     }
 };
 
