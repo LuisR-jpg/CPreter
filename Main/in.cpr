@@ -12,9 +12,17 @@ se
 		se
 			fp "No sirvo"
 			fp "O si?"
+		fp "Ya"
 fr a, b
 fp a+15/9, b
 cw a > 2
 	fp "Esto es un ciclo while"
-	a = a+1
+	a = a+1.5
 fp "hola x2"
+cf n: 10
+	fp "Esto es un ciclo for"
+	si n == 3
+		fp "Nel"
+	se
+		fp "A sisierto"
+fp "Ahhhhhhhhh"
