@@ -1,13 +1,19 @@
 #include <iostream>
+#include <vector>
+#include <map>
 using namespace std;
-class Evaluator{
+class Evaluator
+{
   public: 
-    class Operator{
+    class Operator
+    {
       public: 
         string symbol;
         Operator(string symbol): symbol(symbol){}
         ~Operator(){}
+	/*
 	bool operator >= (const Operator &o){
+	  return true;
 	}
 	bool operator == (const Operator &o){
 	  return symbol == o.symbol;
@@ -15,23 +21,29 @@ class Evaluator{
 	bool operator != (const Operator &o){
 	  return symbol != o.symbol;
 	}
+	*/
     };
     vector<pair<string, int>> expression;
     map<Operator, int> priority;
-    Evaluator(vector<pair<string, int>> expression): expression(expression){
-      vector<vector<Operator>> priorityTable 
+    Evaluator(vector<pair<string, int>> expression): expression(expression)
+    {
+      vector<vector<Operator>> priorityTable =
       {
 	{"&&"},	{"||"},	{"!"},
 	{">=", "<=", ">", "<", "==", "!="},
 	{"+","-"}, {"*","/"}, {"(",")"}
       };
-      for(int i = 0; i < priorityTable.size(); i++){
+      /*
+      for(int i = 0; i < priorityTable.size(); i++)
+      {
 	cout << i << ":\t";
-	for(int j = 0; j < priorityTable[i].size(); j++){
+	for(int j = 0; j < priorityTable[i].size(); j++)
+	{
 	  cout << priorityTable[i][j] << " ";
 	}
 	cout << endl;
       }
+      */
     }
     ~Evaluator(){}
     double evaluate()
@@ -61,6 +73,7 @@ class Evaluator{
       }
       while(out.size()) cout << out.pop().first << " ";
 */
+      return 0;
     }
 };
 
