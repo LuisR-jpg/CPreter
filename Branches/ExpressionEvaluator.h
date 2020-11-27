@@ -13,7 +13,7 @@ class Evaluator
         ~Operator(){}
 	/*
 	bool operator >= (const Operator &o){
-	  return true;
+	  return priority.find(
 	}
 	bool operator == (const Operator &o){
 	  return symbol == o.symbol;
@@ -27,23 +27,22 @@ class Evaluator
     map<Operator, int> priority;
     Evaluator(vector<pair<string, int>> expression): expression(expression)
     {
-      vector<vector<Operator>> priorityTable =
+      vector<vector<string>> priorityTable =
       {
 	{"&&"},	{"||"},	{"!"},
 	{">=", "<=", ">", "<", "==", "!="},
 	{"+","-"}, {"*","/"}, {"(",")"}
       };
-      /*
       for(int i = 0; i < priorityTable.size(); i++)
       {
 	cout << i << ":\t";
 	for(int j = 0; j < priorityTable[i].size(); j++)
 	{
 	  cout << priorityTable[i][j] << " ";
+	  priority.insert(make_pair(Operator(priorityTable[i][j]), i));
 	}
 	cout << endl;
       }
-      */
     }
     ~Evaluator(){}
     double evaluate()
