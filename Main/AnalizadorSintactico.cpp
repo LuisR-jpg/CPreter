@@ -1,6 +1,7 @@
 #include "LexicalAnalyzer.h"
 #include<iostream>
 #include<vector>
+#include<queue>
 using namespace std;
 
 class Instruction
@@ -56,13 +57,13 @@ class Assignment:public Instruction
 {
     public:
         string name;
-        vector<pair<string,int>> t_expresion;
+        queue<pair<string,int>> t_expresion;
         //Expresion expresion;
         Assignment()
         {
             this -> name = "";
         }
-        void insert(string name,vector<pair<string,int>> t_expresion)
+        void insert(string name,queue<pair<string,int>> t_expresion)
         {
             this -> name = name;
             this -> t_expresion = t_expresion;
@@ -75,14 +76,16 @@ class Assignment:public Instruction
         void print()
         {
             cout << name << " = ";
-            for(int i = 0; i<t_expresion.size(); i++)
-                cout << t_expresion[i].first;
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+                cout << aux.front().first, aux.pop();
         }
         friend ostream& operator<<(ostream& output, Assignment& a)
         {
+            queue<pair<string,int>> aux = a.t_expresion;
             output << a.name << " = ";
-            for(int i = 0; i<a.t_expresion.size(); i++)
-                output << a.t_expresion[i].first;
+            while(!aux.empty())
+                output << aux.front().first, aux.pop();
             return output;
         }
 };
@@ -90,13 +93,13 @@ class Assignment:public Instruction
 class fp:public Instruction
 {
     public:
-        vector<pair<string,int>> t_expresion;
+        queue<pair<string,int>> t_expresion;
         //Expresion expresion;
         fp()
         {
 
         }
-        void insert(vector<pair<string,int>> t_expresion)
+        void insert(queue<pair<string,int>> t_expresion)
         {
             this -> t_expresion = t_expresion;
             //this -> expresion = Expresion(t_expresion);
@@ -108,14 +111,16 @@ class fp:public Instruction
         void print()
         {
             cout << "fp ";
-            for(int i = 0; i<t_expresion.size(); i++)
-                cout << t_expresion[i].first;// << " " << t_expresion[i].second;
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+                cout << aux.front().first, aux.pop();
         }
         friend ostream& operator<<(ostream& output, fp& p)
         {
+            queue<pair<string,int>> aux = p.t_expresion;
             output << "fp ";
-            for(int i = 0; i<p.t_expresion.size(); i++)
-                output << p.t_expresion[i].first;// << " " << p.t_expresion[i].second;
+            while(!aux.empty())
+                output << aux.front().first, aux.pop();
             return output;
         }
 };
@@ -316,20 +321,128 @@ class SyntacticAnalyzer
 {
     public:
         LexicalAnalyzer a;
-        vector<pair<string,int>> tokens;
-        vector<pair<Instruction*,int>> instruction;
-        int con = 0, g_indent = 0;
+        queue<pair<string,int>> tokens;
+        queue<Instruction*> instruction;
+        vector<pair<string,int>> token;
+        //vector<pair<Instruction*,int>> instruction;
+        int con = 0;
         SyntacticAnalyzer()
         {
-            this -> tokens = a.getToken();
+            this -> token = a.getToken();
+            for(int i = 0; i < token.size(); i++)
+                tokens.push(token[i]);
             this -> instruction = instructions(tokens, 0);
         }
         ~SyntacticAnalyzer()
         {
-            for(int i=0;i<instruction.size();i++)
-                delete instruction[i].first;
+            /*for(int i=0;i<instructions.size();i++)
+                delete instruction[i].first;*/
         }
-        vector<pair<Instruction*,int>> instructions(vector<pair<string,int>> tokens, int indentation)
+
+
+        queue<Instruction*> instructions(queue<pair<string,int>> tokens, int indentation)
+        {
+            queue<Instruction*> instruction;
+            pair<string, int> last_type;
+            pair<string, int> front_t;
+            int indent = 0;
+            while(!tokens.empty())
+            {
+                front_t = tokens.front();
+                tokens.pop();
+                if(front_t.second == 61) continue;
+                cout << front_t.first << " " << tokens.front().first << endl; ///tokens[i] = front_t, tokens[i+1] = tokens.front()
+                if((front_t.second == 10 && tokens.front().second == 0) || (front_t.first == "," && last_type.second == 10))///Declaration ------ Listo
+                {
+                    Declaration* d = new Declaration;
+                    if(front_t.second == 10) last_type = front_t, d -> insert(front_t.first,tokens.front().first);
+                    else d -> insert(last_type.first,tokens.front().first);
+                    front_t = tokens.front();
+                    tokens.pop();
+                    instruction.push(d);
+                }
+                if(tokens.front().first == "=" || front_t.first == "=")///Assignment ------ Listo
+                {
+                    if(front_t.first == "=") cout << "Assignment Error" << endl, exit(34404);
+                    queue<pair<string,int>> t_expresion;
+                    string name;
+                    Assignment* a = new Assignment;
+                    if(front_t.second == 0) name = front_t.first;
+                    else cout << "Assignment Error" << endl, exit(34404);
+                    front_t = tokens.front();
+                    tokens.pop();
+                    while((tokens.front().second >= 31 && tokens.front().second <= 54) || tokens.front().second == 0)
+                        t_expresion.push(tokens.front()), front_t = tokens.front(), tokens.pop();
+                    a -> insert(name,t_expresion);
+                    instruction.push(a);
+                }
+                if((front_t.first == "fr" && tokens.front().second == 0) || (front_t.first == "," && last_type.first == "fr"))///Read ------- Listo
+                {
+                    fr* r = new fr;
+                    if(front_t.second == 20) last_type = front_t;
+                    r -> insert(tokens.front().first);
+                    front_t = tokens.front();
+                    tokens.pop();
+                    instruction.push(r);
+                }
+
+                if(front_t.first == "fp" || (front_t.first == "," && last_type.first == "fp"))///Print ------ Listo
+                {
+                    queue<pair<string,int>> t_expresion;
+                    fp* p = new fp;
+                    if(front_t.second == 20) last_type = front_t;
+                    while((tokens.front().second >= 31 && tokens.front().second <= 54) || tokens.front().second == 0)
+                        t_expresion.push(tokens.front()), front_t = tokens.front(), tokens.pop();
+                    p -> insert(t_expresion);
+                    instruction.push(p);
+                }
+
+                /*if(tokens[i].first == "si")///If
+                {
+                    si* sif = new si;
+                    vector<pair<string,int>> t_expresion;
+                    while((tokens[i+1].second >= 31 && tokens[i+1].second <= 54) || tokens[i+1].second == 0)
+                        t_expresion.push_back(tokens[i+1]), i++, con++;
+                    sif -> insert_expresion(t_expresion);
+
+                    vector<pair<string,int>> tokens_i;
+                    tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                    con = 0;
+                    //cout << endl << i+1 << " si i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                    sif -> insert_instruction_si(instructions(tokens_i,indentation+1));
+                    i += con;
+                    con = 0;
+                    //cout << endl << i << " si f " << tokens[i].first << " " << tokens[i+1].first  << " " << tokens[i+2].first  << endl;
+
+                    if(tokens[i+1].first == "se") i++, con++;//if(tokens[i].second == 61 || tokens[i].second == 60) i++, con++;
+                    if(tokens[i].first == "se")
+                    {
+                        tokens_i.assign(tokens.begin()+(i+1),tokens.end());
+                        con = 0;
+                        //cout << endl << i+1 << " se i " << tokens[i+1].first << " " << indent << " " << indentation << endl;
+                        sif -> insert_instruction_se(instructions(tokens_i,indentation+1));
+                        i += con;
+                        con = 0;
+                        //cout << endl << i << " se f " << tokens[i].first << " " << tokens[i+1].first  << " " << tokens[i+2].first  << endl;
+                    }
+
+                    instruction.push(sif);
+                }*/
+            }
+
+            /*
+            while(\t)
+                while(!=\n)
+            */
+            return instruction;
+        }
+
+
+
+
+
+
+        /*vector<pair<Instruction*,int>> instructions(vector<pair<string,int>> tokens, int indentation)
         {
             vector<pair<Instruction*,int>> instruction;
             pair<string, int> last;
@@ -529,18 +642,19 @@ class SyntacticAnalyzer
                 else if(indent < indentation) return instruction;
             }
             return instruction;
-        }
+        }*/
 };
 
 int main()
 {
     SyntacticAnalyzer s;
-    cout << "Instrucciones:" << endl;
-    for(int i = 0; i < s.tokens.size(); i++)
-        cout << s.tokens[i].first << " " << s.tokens[i].second << endl;
+    //cout << "Instrucciones:" << endl;
+    /*for(int i = 0; i < s.tokens.size(); i++)
+        cout << s.a.token[i].first << " " << s.a.token[i].second << endl;*/
     cout << endl << endl;
-    for(int i = 0; i < s.instruction.size(); i++)
-        cout << endl << "Instruccion " << i << endl,s.instruction[i].first -> print(), cout << endl;
+    cout << endl << endl;
+    while(!s.instruction.empty())
+        s.instruction.front() -> print(),s.instruction.pop() , cout << endl;
         //s.instruction[i].first -> print(), cout << endl;
     return 0;
 }
