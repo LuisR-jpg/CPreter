@@ -14,6 +14,10 @@ class SyntacticAnalyzer
         SyntacticAnalyzer()
         {
             this -> token = a.getToken();
+
+            for(int i = 0; i < token.size(); i++)
+                cout << token[i].first << " " << token[i].second << endl;
+
             for(int i = 0; i < token.size(); i++)
                 tokens.push(token[i]);
             this -> instruction = instructions(tokens);
@@ -165,7 +169,7 @@ class SyntacticAnalyzer
                     for(int j = 0; j<3; j++)
                     {
                         if(isdigit(values[j][0])) val = stoi(values[j]);
-                        else val = 0;//Si es variable, obtener su valor de la tabla de símbolos
+                        else val = 0;//Si es variable, obtener su valor de la tabla de sï¿½mbolos
                         if(j == 0) initial_value = val;
                         if(j == 1) final_value = val;
                         if(j == 2) increment = val;

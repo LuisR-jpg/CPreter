@@ -1,4 +1,5 @@
 dll a
+di b = (10 >= (9/2 - 3*2)*2) && (5 + 9 <= 8 / 2)
 cf n:11,1,2
 	fp "Esto es un ciclo for"
 	si n == 5
