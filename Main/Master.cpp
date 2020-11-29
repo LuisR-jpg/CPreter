@@ -1,10 +1,8 @@
-#include "LexicalAnalyzer.h"
+#include "SyntacticAnalyzer.h"
 int main()
 {
-    LexicalAnalyzer a;
-    vector<pair<string, int>> aux = a.getToken();
-    for(int i = 0; i < aux.size(); i++){
-      cout << aux[i].first << " " << aux[i].second << endl;
-    }
+    SyntacticAnalyzer s;
+    while(!s.instruction.empty())
+        s.instruction.front() -> print("    "),s.instruction.pop() , cout << endl;
     return 0;
 }

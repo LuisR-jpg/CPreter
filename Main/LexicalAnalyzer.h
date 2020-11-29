@@ -72,7 +72,7 @@ class LexicalAnalyzer
                     else if(pun>1)
                     {
                         cout << "Error" << endl;
-                        return;
+                        exit(34404);
                     }
                     else insert(aux, 50);//50 = valor entero
                     aux = "";

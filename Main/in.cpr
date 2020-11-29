@@ -1,28 +1,16 @@
-dll a, b
-a = 5*12+(25-12/3)*b
-si a>=b
-	fp "a es mayor o igual a b"
-	fp "hola ", a
-se
-	fp "b es mayor a a"
-	cw b == 3
-		fp "Anidado"
-		si b==1
-			fp "Anidado x2"
-		se
-			fp "No sirvo"
-			fp "O si?"
-		fp "Ya"
-fr a, b
-fp a+15/9, b
-cw a > 2
-	fp "Esto es un ciclo while"
-	a = a+1.5
-fp "hola x2"
-cf n: 10
+dll a
+cf n:11,1,2
 	fp "Esto es un ciclo for"
-	si n == 3
-		fp "Nel"
+	si n == 5
+		fp "si en cf"
+		cw a <= 5
+			fr a
+			fp "cw en si en cf"
 	se
-		fp "A sisierto"
-fp "Ahhhhhhhhh"
+		fp "se en cf"
+		cw a <= 5
+			fr a
+			fp "cw en se en cf"
+fp "Fin del programa"
+fr a,b,c
+fp a,b,c
