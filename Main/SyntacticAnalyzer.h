@@ -1,8 +1,8 @@
 #include "LexicalAnalyzer.h"
 #include "Instructions.h"
-#include<iostream>
-#include<vector>
-#include<queue>
+#include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
 class SyntacticAnalyzer
 {
@@ -14,10 +14,6 @@ class SyntacticAnalyzer
         SyntacticAnalyzer()
         {
             this -> token = a.getToken();
-
-            for(int i = 0; i < token.size(); i++)
-                cout << token[i].first << " " << token[i].second << endl;
-
             for(int i = 0; i < token.size(); i++)
                 tokens.push(token[i]);
             this -> instruction = instructions(tokens);

@@ -27,8 +27,12 @@ class Evaluator
           priority.insert(make_pair(priorityTable[i][j], i));
     }
     ~Evaluator(){}
+    void prepare(){
+      cout << "IMPLEMENTAMEEEEEEEEEEEEEEEEEE" << endl;
+    }
     double evaluate()
     {
+      prepare();
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
       for(auto i: expression)
