@@ -14,6 +14,8 @@ class SyntacticAnalyzer
         SyntacticAnalyzer()
         {
             this -> token = a.getToken();
+            for(auto i: token)
+                cout << i.first << " " << i.second << endl;
             for(int i = 0; i < token.size(); i++)
                 tokens.push(token[i]);
             this -> instruction = instructions(tokens);

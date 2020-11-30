@@ -9,10 +9,7 @@ class Instruction
         {
 
         }
-        void run()
-        {
-            return;
-        }
+        virtual void run() = 0;
         virtual void print(string s) = 0;
 };
 
@@ -75,7 +72,7 @@ class Assignment:public Instruction
         }
 };
 
-class fp:public Instruction
+class fp: public Instruction
 {
     public:
         queue<pair<string,int>> t_expresion;
@@ -102,7 +99,7 @@ class fp:public Instruction
         }
 };
 
-class fr:public Instruction
+class fr: public Instruction
 {
     public:
         string name;
@@ -128,7 +125,7 @@ class fr:public Instruction
         }
 };
 
-class si:public Instruction
+class si: public Instruction
 {
     public:
         //Expresion expresion;
@@ -231,7 +228,7 @@ class cf:public Instruction
         }
 };
 
-class cw:public Instruction
+class cw: public Instruction
 {
     public:
         //Expresion expresion;

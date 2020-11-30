@@ -8,9 +8,9 @@ using namespace std;
 class Evaluator
 {
   public: 
-    vector<pair<string, int>> expression;
+    queue<pair<string, int>> expression;
     unordered_map<string, int> priority;
-    Evaluator(vector<pair<string, int>> expression): expression(expression)
+    Evaluator(queue<pair<string, int>> expression): expression(expression)
     {
       fillPriority();
     }
@@ -28,15 +28,33 @@ class Evaluator
     }
     ~Evaluator(){}
     void prepare(){
-      cout << "IMPLEMENTAMEEEEEEEEEEEEEEEEEE" << endl;
+      int n = expression.size();
+      string s = "";
+      for(int i = 0; i < n; i++)
+      {
+        auto tok = expression.front();
+        expression.pop();
+        if(tok.first == "+" || tok.first == "-")
+        {
+          if(s == "") s = tok.first;
+          else if(tok.first == "-") s = (s == "+"? "-": "+");
+        }
+        else
+        {
+          if(s != "") expression.push(make_pair(s, 32));
+          s = "";
+          expression.push(tok);
+        }
+      }
     }
     double evaluate()
     {
       prepare();
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
-      for(auto i: expression)
+      while(expression.size())
       {
+        auto i = expression.front();
         if(i.second >= 50 && i.second <= 60) out.push(i);
         else if(i.first == "(") sta.push(i);
         else if(i.first == ")")
@@ -50,6 +68,7 @@ class Evaluator
             out.push(sta.top()), sta.pop();
           sta.push(i);
         }
+        expression.pop();
       }
       while(sta.size())
       {
