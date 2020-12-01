@@ -13,6 +13,16 @@ class Evaluator
     Evaluator(queue<pair<string, int>> expression): expression(expression)
     {
       fillPriority();
+      ///DEBUG
+      int n = expression.size();
+      for(int i = 0; i < n; i++){
+        auto a = expression.front();
+        cout << a.first << " ";
+        expression.pop();
+        expression.push(a);
+      }
+      cout << endl;
+      ///DEBUG
     }
     void fillPriority()
     {
@@ -29,10 +39,11 @@ class Evaluator
     ~Evaluator(){}
     void prepare(){
       int n = expression.size();
+      pair<string, int> tok, last;
       string s = "";
       for(int i = 0; i < n; i++)
       {
-        auto tok = expression.front();
+        tok = expression.front();
         expression.pop();
         if(tok.first == "+" || tok.first == "-")
         {
@@ -41,8 +52,12 @@ class Evaluator
         }
         else
         {
-          if(s != "") expression.push(make_pair(s, 32));
-          s = "";
+          if(s != "")
+          {
+            if(last.second >= 50 && last.second <= 60) expression.push(make_pair(s, 32));
+            else tok.first = s + tok.first;
+          }
+          s = "", last = tok;
           expression.push(tok);
         }
       }
@@ -50,6 +65,16 @@ class Evaluator
     double evaluate()
     {
       prepare();
+      ///DEBUG
+      int n = expression.size();
+      for(int i = 0; i < n; i++){
+        auto a = expression.front();
+        cout << a.first << " ";
+        expression.pop();
+        expression.push(a);
+      }
+      cout << endl;
+      ///DEBUG
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
       while(expression.size())
@@ -80,7 +105,9 @@ class Evaluator
       {
         auto a = out.front();
         out.pop();
+        ///DEBUG
         cout << a.first << " ";
+        ///DEBUG
         if(a.second >= 50 && a.second <= 60) res.push(stod(a.first));
         else
         {
@@ -107,6 +134,9 @@ class Evaluator
           res.push(ans);
         }
       }
+      ///DEBUG
+      cout << endl;
+      ///DEBUG
       return res.top();
     }
 };
