@@ -1,5 +1,5 @@
-#include <iostream>
-#include <queue>
+#include<iostream>
+#include<queue>
 using namespace std;
 
 class Instruction
@@ -9,7 +9,10 @@ class Instruction
         {
 
         }
-        virtual void run() = 0;
+        void run()
+        {
+            return;
+        }
         virtual void print(string s) = 0;
 };
 
@@ -72,7 +75,7 @@ class Assignment:public Instruction
         }
 };
 
-class fp: public Instruction
+class fp:public Instruction
 {
     public:
         queue<pair<string,int>> t_expresion;
@@ -99,7 +102,7 @@ class fp: public Instruction
         }
 };
 
-class fr: public Instruction
+class fr:public Instruction
 {
     public:
         string name;
@@ -125,7 +128,7 @@ class fr: public Instruction
         }
 };
 
-class si: public Instruction
+class si:public Instruction
 {
     public:
         //Expresion expresion;
@@ -188,9 +191,9 @@ class cf:public Instruction
 {
     public:
         string name;
-        int inital_value;
-        int final_value;
-        int increment;
+        queue<pair<string,int>> inital_value;
+        queue<pair<string,int>> final_value;
+        queue<pair<string,int>> increment;
         queue<Instruction*> instructions_cf;
         cf ()
         {
@@ -205,7 +208,21 @@ class cf:public Instruction
         {
             return;
         }
-        void insert(string name,int final_value,int inital_value = 0,int increment = 1)
+        void insert(string name, queue<pair<string,int>> final_value)
+        {
+            this -> name = name;
+            this -> inital_value.push(make_pair("0",50));
+            this -> final_value = final_value;
+            this -> increment.push(make_pair("1",50));
+        }
+        void insert(string name, queue<pair<string,int>> inital_value, queue<pair<string,int>> final_value)
+        {
+            this -> name = name;
+            this -> inital_value = inital_value;
+            this -> final_value = final_value;
+            this -> increment.push(make_pair("1",50));
+        }
+        void insert(string name, queue<pair<string,int>> inital_value, queue<pair<string,int>> final_value, queue<pair<string,int>> increment)
         {
             this -> name = name;
             this -> inital_value = inital_value;
@@ -219,7 +236,18 @@ class cf:public Instruction
         void print(string s)
         {
             int nl = 0;
-            cout << "cf n = " << inital_value << ", n <= " << final_value << ", n+= " << increment;
+            cout << "cf " << name << " = ";
+            queue<pair<string,int>> aux = inital_value;
+            while(!aux.empty())
+                cout << aux.front().first, aux.pop();
+            cout << ", " << name << " <= ";
+            aux = final_value;
+            while(!aux.empty())
+                cout << aux.front().first, aux.pop();
+            cout << ", " << name << " += ";
+            aux = increment;
+            while(!aux.empty())
+                cout << aux.front().first, aux.pop();
             cout << endl;
             queue<Instruction*> aux2 = instructions_cf;
             while(!aux2.empty())
@@ -228,7 +256,7 @@ class cf:public Instruction
         }
 };
 
-class cw: public Instruction
+class cw:public Instruction
 {
     public:
         //Expresion expresion;

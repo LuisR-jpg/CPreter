@@ -1,8 +1,8 @@
 #include "LexicalAnalyzer.h"
 #include "Instructions.h"
-#include <iostream>
-#include <vector>
-#include <queue>
+#include<iostream>
+#include<vector>
+#include<queue>
 using namespace std;
 class SyntacticAnalyzer
 {
@@ -14,8 +14,6 @@ class SyntacticAnalyzer
         SyntacticAnalyzer()
         {
             this -> token = a.getToken();
-            for(auto i: token)
-                cout << i.first << " " << i.second << endl;
             for(int i = 0; i < token.size(); i++)
                 tokens.push(token[i]);
             this -> instruction = instructions(tokens);
@@ -125,10 +123,11 @@ class SyntacticAnalyzer
                 if(front_t.first == "cf")///For ------ Listo?
                 {
                     string name;
-                    int initial_value, final_value, increment, val;
-                    string values[3] = {"0","0","1"};
+                    int aux;
+                    queue<pair<string,int>> initial_value, final_value, increment;
                     for(int i = 0; i < 7; i++)
                     {
+                        if((i == 3 || i == 5) && front_t.second == 61) break;
                         front_t = tokens.front();
                         tokens.pop();
                         if(i == 0 && front_t.second == 00)
@@ -142,38 +141,54 @@ class SyntacticAnalyzer
                         if(i == 1 && front_t.first == ":") continue;
                         if(i == 2 && (front_t.second == 0 || front_t.second == 50))
                         {
-                            values[0] = front_t.first;
+                            aux = 1;
+                            while((front_t.second >= 31 && front_t.second <= 54) || front_t.second == 0)
+                            {
+                                initial_value.push(front_t);
+                                if(tokens.front().first == "," || tokens.front().first == "\n") break;
+                                front_t = tokens.front();
+                                tokens.pop();
+                            }
                             continue;
                         }
                         else if(i == 2 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
                         if(i == 3 && front_t.first == ",") continue;
-                        else if(i == 3 && front_t.first == "\n") break;
+                        else if(i == 3 && front_t.second == 61) break;
                         if(i == 4 && (front_t.second == 0 || front_t.second == 50))
                         {
-                            values[1] = front_t.first;
+                            aux = 2;
+                            while((front_t.second >= 31 && front_t.second <= 54) || front_t.second == 0)
+                            {
+                                final_value.push(front_t);
+                                if(tokens.front().first == "," || tokens.front().first == "\n") break;
+                                front_t = tokens.front();
+                                tokens.pop();
+                            }
                             continue;
                         }
                         else if(i == 4 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
                         if(i == 5 && front_t.first == ",") continue;
-                        else if(i == 5 && front_t.first == "\n") break;
+                        else if(i == 5 && front_t.second == 61) break;
                         if(i == 6 && (front_t.second == 0 || front_t.second == 50))
                         {
-                            values[2] = front_t.first;
+                            aux = 3;
+
+                            while((front_t.second >= 31 && front_t.second <= 54) || front_t.second == 0)
+                            {
+                                increment.push(front_t);
+                                if(tokens.front().first == "," || tokens.front().first == "\n") break;
+                                front_t = tokens.front();
+                                tokens.pop();
+                            }
                             continue;
                         }
                         else if(i == 6 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
                         else cout << "Syntax error" << endl, exit(34404);
                     }
-                    for(int j = 0; j<3; j++)
-                    {
-                        if(isdigit(values[j][0])) val = stoi(values[j]);
-                        else val = 0;//Si es variable, obtener su valor de la tabla de s�mbolos
-                        if(j == 0) initial_value = val;
-                        if(j == 1) final_value = val;
-                        if(j == 2) increment = val;
-                    }
                     cf* f = new cf;
-                    f -> insert(name,initial_value,final_value,increment);
+                    if(aux == 1) f -> insert(name,initial_value);
+                    if(aux == 2) f -> insert(name,initial_value,final_value);
+                    if(aux == 3) f -> insert(name,initial_value,final_value,increment);
                     queue<pair<string,int>> tokens_i;
                     while(!tokens.empty() && (tokens.front().second == 60 || tokens.front().second == 61))
                     {
