@@ -3,7 +3,13 @@
 int main()
 {
     SyntacticAnalyzer s;
-    while(!s.instruction.empty())
-        s.instruction.front() -> print("    "),s.instruction.pop() , cout << endl;
+    while(s.instruction.size())
+    {
+        auto a = s.instruction.front();
+        a -> print("    ");
+        cout << endl;
+        a -> run();
+        s.instruction.pop();
+    }
     return 0;
 }

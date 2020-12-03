@@ -9,7 +9,12 @@ void Assignment::run()
 }
 void fp::run()
 {
-    return;
+    while(t_expresion.size())
+    {
+        auto a = t_expresion.front();
+        if(a.second == 53) cout << "\tCorriendo...\n\t" << a.first << endl;
+        t_expresion.pop();
+    }
 }
 void fr::run()
 {
