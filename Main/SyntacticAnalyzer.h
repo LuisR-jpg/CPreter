@@ -1,8 +1,8 @@
 #include "LexicalAnalyzer.h"
 #include "Instructions.h"
-#include<iostream>
-#include<vector>
-#include<queue>
+#include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
 class SyntacticAnalyzer
 {

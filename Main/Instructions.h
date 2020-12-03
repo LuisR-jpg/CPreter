@@ -1,5 +1,5 @@
-#include<iostream>
-#include<queue>
+#include <iostream>
+#include <queue>
 using namespace std;
 
 class Instruction
@@ -9,10 +9,7 @@ class Instruction
         {
 
         }
-        void run()
-        {
-            return;
-        }
+        virtual void run() = 0;
         virtual void print(string s) = 0;
 };
 
@@ -36,14 +33,11 @@ class Declaration:public Instruction
             this -> name = name;
             this -> type = type;
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             cout << type << " " << name;
         }
+        void run();
 };
 
 class Assignment:public Instruction
@@ -62,10 +56,6 @@ class Assignment:public Instruction
             this -> t_expresion = t_expresion;
             //this -> expresion = Expresion(t_expresion);
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             cout << name << " = ";
@@ -73,6 +63,7 @@ class Assignment:public Instruction
             while(!aux.empty())
                 cout << aux.front().first, aux.pop();
         }
+        void run();
 };
 
 class fp:public Instruction
@@ -89,10 +80,6 @@ class fp:public Instruction
             this -> t_expresion = t_expresion;
             //this -> expresion = Expresion(t_expresion);
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             cout << "fp ";
@@ -100,6 +87,7 @@ class fp:public Instruction
             while(!aux.empty())
                 cout << aux.front().first, aux.pop();
         }
+        void run();
 };
 
 class fr:public Instruction
@@ -118,14 +106,11 @@ class fr:public Instruction
         {
             this -> name = name;
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             cout << "fr " << name;
         }
+        void run();
 };
 
 class si:public Instruction
@@ -159,10 +144,6 @@ class si:public Instruction
         {
             this -> instructions_se = instructions_se;
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             int nl = 0;
@@ -185,6 +166,7 @@ class si:public Instruction
                     cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_se.size() ? cout << endl : cout << "");
             }
         }
+        void run();
 };
 
 class cf:public Instruction
@@ -203,10 +185,6 @@ class cf:public Instruction
         {
             while(!instructions_cf.empty())
                 delete instructions_cf.front(),instructions_cf.pop();
-        }
-        void run()
-        {
-            return;
         }
         void insert(string name, queue<pair<string,int>> final_value)
         {
@@ -254,6 +232,7 @@ class cf:public Instruction
                 //cout << s << "Instruccion cf: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cf.size() ? cout << endl : cout << "");
                 cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cf.size() ? cout << endl : cout << "");
         }
+        void run();
 };
 
 class cw:public Instruction
@@ -280,10 +259,6 @@ class cw:public Instruction
         {
             this -> instructions_cw = instructions_cw;
         }
-        void run()
-        {
-            return;
-        }
         void print(string s)
         {
             int nl = 0;
@@ -297,4 +272,5 @@ class cw:public Instruction
                 //cout << s << "Instruccion cw: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cw.size() ? cout << endl : cout << "");
                 cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cw.size() ? cout << endl : cout << "");
         }
+        void run();
 };

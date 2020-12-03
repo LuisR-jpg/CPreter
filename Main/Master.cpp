@@ -1,4 +1,5 @@
-#include "SyntacticAnalyzer.h"
+//#include "SyntacticAnalyzer.h"
+#include "SemanticAnalyzer.h"
 int main()
 {
     SyntacticAnalyzer s;
