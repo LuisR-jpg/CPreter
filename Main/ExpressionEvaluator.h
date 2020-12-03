@@ -10,6 +10,10 @@ class Evaluator
   public: 
     queue<pair<string, int>> expression;
     unordered_map<string, int> priority;
+    Evaluator()
+    {
+      fillPriority();
+    }
     Evaluator(queue<pair<string, int>> expression): expression(expression)
     {
       fillPriority();
@@ -62,9 +66,20 @@ class Evaluator
         }
       }
     }
+    double evaluate(queue<pair<string, int>> e)
+    {
+      expression = e;
+      return evaluate();
+    }
     double evaluate()
     {
+      /*
+      ///DEBUG
+      cout << "\t\t\tjola" << endl;
+      ///DEBUG
+      */
       prepare();
+      /*
       ///DEBUG
       int n = expression.size();
       for(int i = 0; i < n; i++){
@@ -75,6 +90,7 @@ class Evaluator
       }
       cout << endl;
       ///DEBUG
+      */
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
       while(expression.size())
@@ -105,9 +121,11 @@ class Evaluator
       {
         auto a = out.front();
         out.pop();
+        /*
         ///DEBUG
         cout << a.first << " ";
         ///DEBUG
+        */
         if(a.second >= 50 && a.second <= 60) res.push(stod(a.first));
         else
         {
@@ -134,9 +152,11 @@ class Evaluator
           res.push(ans);
         }
       }
+      /*
       ///DEBUG
       cout << endl;
       ///DEBUG
+      */
       return res.top();
     }
 };

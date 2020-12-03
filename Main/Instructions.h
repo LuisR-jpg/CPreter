@@ -1,19 +1,17 @@
 #include <iostream>
 #include <queue>
+#include "ExpressionEvaluator.h"
 using namespace std;
 
 class Instruction
 {
     public:
-        Instruction()
-        {
-
-        }
+        Instruction(){}
         virtual void run() = 0;
         virtual void print(string s) = 0;
 };
 
-class Declaration:public Instruction
+class Declaration: public Instruction
 {
     public:
         string name;
@@ -66,19 +64,15 @@ class Assignment:public Instruction
         void run();
 };
 
-class fp:public Instruction
+class fp: public Instruction
 {
     public:
         queue<pair<string,int>> t_expresion;
-        //Expresion expresion;
-        fp()
-        {
-
-        }
+        Evaluator evaluator;
+        fp(){}
         void insert(queue<pair<string,int>> t_expresion)
         {
             this -> t_expresion = t_expresion;
-            //this -> expresion = Expresion(t_expresion);
         }
         void print(string s)
         {

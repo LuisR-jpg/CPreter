@@ -17,4 +17,8 @@ cf n:11,1,2
 			fp "cw en se en cf"
 fp "Fin del programa"
 fr a,b,c
-fp a,b,c
+fp "a", "b","c"
+fp 5*2
+fp "Debe ser: 0", 10>= (9/2 - 3*2)*2 && 5 + 9 <= 8 / 2
+fp "Debe ser: 63", ------5*12 + (+-25 - +12/3 * -7)
+fp "Debe ser: 207", 5*12 + (25 - 12/3) * 7
