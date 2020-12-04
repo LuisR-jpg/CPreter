@@ -1,6 +1,21 @@
 #include "SyntacticAnalyzer.h"
+//#include "ExpressionEvaluator.h"
 #include <map>
+#include <string>
 map<string, pair<string, void*>> SymbolTable;
+/*
+double evaluate()
+{
+            else if(!tok.second)
+        {
+          auto var = SymbolTable[tok.first];
+          if(var.first == "db") expression.push(make_pair(to_string((int)*((bool*)var.second)), 52));
+          if(var.first == "dc") expression.push(make_pair(to_string((int)(*((char*)var.second))), 54));
+          if(var.first == "di") expression.push(make_pair(to_string(*((int*)var.second)), 50));
+          if(var.first == "dd") expression.push(make_pair(to_string(*((double*)var.second)), 51));
+        }
+}
+*/
 void Declaration::run()
 {
     if(SymbolTable.find(name) != SymbolTable.end())
@@ -47,10 +62,15 @@ void fp::run()
     cout << "\t\t\t\t\t...";
     auto a = t_expresion.front();
     if(a.second == 53) cout << a.first;
+    else if(a.second == 54 && t_expresion.size() == 1) cout << a.first;
     else
     {
-        if(!a.second && SymbolTable[a.first].first == "ds")
-            cout << *((string*)SymbolTable[a.first].second);
+        auto var = SymbolTable[a.first];
+        if(!a.second)
+        {
+            if(var.first == "ds") cout << *((string*)var.second);
+            else if(t_expresion.size() == 1 && var.first == "dc") cout << *((char*)var.second);
+        }
         else cout << evaluator.evaluate(t_expresion);
     }
     //else cout << evaluator.evaluate(t_expresion);
@@ -66,13 +86,15 @@ void fr::run()
         string s;
         cin >> s;
         q.push(make_pair(s, 53));
-        getchar();
+        //getchar();
     }
     if(type == "dc")
     {
         char c;
         cin >> c;
-        q.push(make_pair(to_string(c), 54));
+        string s = "";
+        s += c;
+        q.push(make_pair(s, 54));
     }
     a.insert(name, q);
     a.run();

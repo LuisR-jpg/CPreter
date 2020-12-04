@@ -38,7 +38,7 @@ class Declaration: public Instruction
         void run();
 };
 
-class Assignment:public Instruction
+class Assignment: public Instruction
 {
     public:
         string name;
@@ -83,7 +83,7 @@ class fp: public Instruction
         void run();
 };
 
-class fr:public Instruction
+class fr: public Instruction
 {
     public:
         string name;
@@ -106,7 +106,7 @@ class fr:public Instruction
         void run();
 };
 
-class si:public Instruction
+class si: public Instruction
 {
     public:
         //Expresion expresion;
@@ -162,7 +162,7 @@ class si:public Instruction
         void run();
 };
 
-class cf:public Instruction
+class cf: public Instruction
 {
     public:
         string name;
@@ -228,7 +228,7 @@ class cf:public Instruction
         void run();
 };
 
-class cw:public Instruction
+class cw: public Instruction
 {
     public:
         //Expresion expresion;

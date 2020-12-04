@@ -48,7 +48,6 @@ class Evaluator
       for(int i = 0; i < n; i++)
       {
         tok = expression.front();
-        expression.pop();
         if(tok.first == "+" || tok.first == "-")
         {
           if(s == "") s = tok.first;
@@ -64,6 +63,7 @@ class Evaluator
           s = "", last = tok;
           expression.push(tok);
         }
+        expression.pop();
       }
     }
     double evaluate(queue<pair<string, int>> e)
@@ -120,12 +120,12 @@ class Evaluator
       while(out.size())
       {
         auto a = out.front();
-        out.pop();
         /*
         ///DEBUG
         cout << a.first << " ";
         ///DEBUG
         */
+        if(a.second == 54) a.first = to_string((int)a.first[0]);
         if(a.second >= 50 && a.second <= 60) res.push(stod(a.first));
         else
         {
@@ -151,6 +151,7 @@ class Evaluator
           }
           res.push(ans);
         }
+        out.pop();
       }
       /*
       ///DEBUG

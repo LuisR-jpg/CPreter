@@ -2,4 +2,4 @@ fp "Inicio del programa"
 ds s
 dc c
 fr s, c
-fp s,c
+fp s,c*10
