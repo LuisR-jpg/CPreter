@@ -2,6 +2,7 @@
     "files.associations": {
         "utility": "cpp",
         "ostream": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "queue": "cpp"
     }
 }

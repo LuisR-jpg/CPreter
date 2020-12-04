@@ -3,9 +3,20 @@
 map<string, pair<string, void*>> SymbolTable;
 void Declaration::run()
 {
-    if(type == "dv");
-    if(type == "di");
-    if(type == "dd");
+    if(SymbolTable.find(name) != SymbolTable.end())
+    {
+        cout << "Variable Repetida..." << endl;
+        exit(0);
+    }
+    void *pointer;
+    cout << "\t\t\t\t";
+    if(type == "db") cout << "bool", pointer = new bool;
+    else if(type == "dc") cout << "char", pointer = new char;
+    else if(type == "di") cout << "int", pointer = new int;
+    else if(type == "dd") cout << "double", pointer = new double;
+    else cout << "string", pointer = new string;
+    cout << endl;
+    SymbolTable.insert(make_pair(name, make_pair(type, pointer)));
 }
 void Assignment::run()
 {
@@ -13,20 +24,11 @@ void Assignment::run()
 }
 void fp::run()
 {
-    cout << "\tCorriendo...\n\t";
+    cout << "\t...";
     auto a = t_expresion.front();
     if(a.second == 53) cout << a.first;
     else cout << evaluator.evaluate(t_expresion);
     cout << endl;
-    /*
-    while(t_expresion.size())
-    {
-        auto a = t_expresion.front();
-        if(a.second == 53) cout << a.first << endl;
-        else cout << evaluator.evaluate(t_expresion);
-        t_expresion.pop();
-    }
-    */
 }
 void fr::run()
 {

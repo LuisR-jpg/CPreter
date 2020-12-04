@@ -1,1 +1,27 @@
-fp "hola"
+fp "Inicio del programa"
+di i = -5
+dc c = 'h'
+db b = 10 >= (9/2 - 3*2)*2 && 5 + 9 <= 8 / 2
+ds s = "holas"
+dd d = 4/3
+fp "Al centro del programa"
+cf n:11,1,2
+	fp "Esto es un ciclo for"
+	si n == 5
+		fp "si en cf"
+		cw a <= 5
+			fr a
+			fp "cw en si en cf"
+	se
+		fp "se en cf"
+		cw a <= 5
+			fr a
+			fp "cw en se en cf"
+fp "Fin del programa"
+fr a,b,c
+fp "a", "b","c"
+fp 5*2
+fp "Debe ser: 0", 10>= (9/2 - 3*2)*2 && 5 + 9 <= 8 / 2
+fp "Debe ser: 63", ------5*12 + (+-25 - +12/3 * -7)
+fp "Debe ser: 207", 5*12 + (25 - 12/3) * 7
+di a, b, c, d, e
