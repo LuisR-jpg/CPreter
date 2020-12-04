@@ -43,7 +43,7 @@ class Assignment:public Instruction
     public:
         string name;
         queue<pair<string,int>> t_expresion;
-        //Expresion expresion;
+        Evaluator evaluator;
         Assignment()
         {
             this -> name = "";
@@ -52,7 +52,6 @@ class Assignment:public Instruction
         {
             this -> name = name;
             this -> t_expresion = t_expresion;
-            //this -> expresion = Expresion(t_expresion);
         }
         void print(string s)
         {
