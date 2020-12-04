@@ -2,4 +2,14 @@ fp "Inicio del programa"
 ds s
 dc c
 fr s, c
-fp s,c*10
+fp s,c*10, c
+di a
+a = 5
+fp a, a/5, a <= 10, 'a', a < 0
+di hola 
+hola = 92
+fp hola
+fr hola
+fp hola
+s = "Fin del programa"
+fp s
