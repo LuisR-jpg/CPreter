@@ -54,15 +54,6 @@ void Declaration::run()
         exit(0);
     }
     void *pointer;
-    /*
-    cout << "\t\t\t\t";
-    if(type == "db") cout << "bool", pointer = new bool;
-    else if(type == "dc") cout << "char", pointer = new char;
-    else if(type == "di") cout << "int", pointer = new int;
-    else if(type == "dd") cout << "double", pointer = new double;
-    else cout << "string", pointer = new string;
-    cout << endl;
-    */
     SymbolTable.insert(make_pair(name, make_pair(type, pointer)));
 }
 void Assignment::run()
@@ -107,7 +98,6 @@ void fp::run()
     else cout << evaluator.evaluate(replace(t_expresion));
     cout << endl;
 }
-//////////////////MEJORAAAAAAAAAAAAAAAAAAR
 void fr::run() 
 {
     if(SymbolTable.find(name) == SymbolTable.end())
@@ -119,27 +109,15 @@ void fr::run()
     queue<pair<string, int>> q;
     string type = SymbolTable[name].first, s;
     double d, t;
-    if(type == "ds" || type == "dc")
+    if(type == "ds" || type == "dc") 
     {
         cin >> s;
         t = 53 + (type == "dc");
-        //q.push(make_pair(s, 53 + (type == "dc")));
-    }/*
-    if(type == "dc")
-    {
-        char c;
-        cin >> c;
-        string s = "";
-        s += c;
-        q.push(make_pair(s, 54));
-    }*/
+    }
     else
     {
-        //double d;
-        t = (type == "di"? 50: (type == "dd"? 51: 52));
         cin >> d;
-        //q.push(make_pair(to_string(d), t));
-        s = to_string(d);
+        t = (type == "di"? 50: (type == "dd"? 51: 52)), s = to_string(d);
     }
     q.push(make_pair(s, t));
     a.insert(name, q);
@@ -148,7 +126,14 @@ void fr::run()
 }
 void si::run()
 {
-    return;
+    auto condition = evaluator.evaluate(replace(t_expresion));
+    auto toRun = (condition? instructions_si: instructions_se);
+    while(toRun.size())
+    {
+        auto inst = toRun.front();
+        inst -> run();
+        toRun.pop();
+    }
 }
 void cf::run()
 {

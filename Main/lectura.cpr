@@ -13,3 +13,4 @@ fr hola
 fp hola
 s = "Fin del programa"
 fp s
+si a <= 10

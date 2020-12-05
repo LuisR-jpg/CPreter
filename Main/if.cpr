@@ -1,0 +1,12 @@
+dd a = 4.9
+si a < 5
+    fp "Si"
+se 
+    fp "No"
+    di b
+    fr b
+    si b >= 100*2
+        fp "NoSi"
+    se
+        fp "NoNo"
+fp "asies"

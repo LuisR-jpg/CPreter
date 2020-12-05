@@ -109,7 +109,7 @@ class fr: public Instruction
 class si: public Instruction
 {
     public:
-        //Expresion expresion;
+        Evaluator evaluator;
         queue<pair<string,int>> t_expresion;
         queue<Instruction*> instructions_si;
         queue<Instruction*> instructions_se;
@@ -127,7 +127,6 @@ class si: public Instruction
         void insert_expresion(queue<pair<string,int>> t_expresion)
         {
             this -> t_expresion = t_expresion;
-            //this -> expresion = Expresion(t_expresion);
         }
         void insert_instruction_si(queue<Instruction*> instructions_si)
         {
