@@ -137,7 +137,32 @@ void si::run()
 }
 void cf::run()
 {
-    return;
+    //double begin = evaluator.evaluate(replace(inital_value));
+    double end = evaluator.evaluate(replace(final_value));
+    double inc = evaluator.evaluate(replace(increment));
+    bool erase = false;
+    if(SymbolTable.find(name) == SymbolTable.end()) 
+    {
+        erase = true;
+        Declaration a("dd", name);
+        a.run();
+    }
+    Assignment a;
+    a.insert(name, inital_value);
+    a.run();
+    double *var = (double*)SymbolTable[name].second, n = instructions_cf.size();
+    for(; *var <= end; *var += inc)
+    {
+    cout << "HOLAS" << endl;
+        for(int i = 0; i < n; i++)
+        {
+            auto inst = instructions_cf.front();
+            inst -> run();
+            instructions_cf.push(inst);
+            instructions_cf.pop();
+        }
+    }
+    if(erase) SymbolTable.erase(name);
 }
 void cw::run()
 {

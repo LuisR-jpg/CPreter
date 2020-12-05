@@ -1,3 +1,8 @@
 ds s = "holajaja"
-cf n:11,1,2
-    fp n
+fp s
+cf a:0,1,10 
+    fp "aki"
+cf b: 0, 2, 5
+    fp "aka"
+cf c: 1, 2
+    fp "eke"

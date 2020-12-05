@@ -7,8 +7,8 @@ int main()
     {
         auto a = s.instruction.front();
         a -> print("    ");
-        a -> run();
         cout << endl;
+        a -> run();
         s.instruction.pop();
     }
     return 0;

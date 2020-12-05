@@ -4,6 +4,8 @@
         "ostream": "cpp",
         "xstring": "cpp",
         "queue": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "system_error": "cpp",
+        "xtr1common": "cpp"
     }
 }

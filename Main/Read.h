@@ -8,7 +8,8 @@ class Read
     string getCode(string name = "in.cpr"){
       //name = "test.cpr";
       //name = "lectura.cpr";
-      name = "if.cpr";
+      //name = "if.cpr";
+      name = "for.cpr";
       ifstream file;
       string a, b;
       file.open(name, ios::in);

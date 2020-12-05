@@ -169,6 +169,7 @@ class cf: public Instruction
         queue<pair<string,int>> final_value;
         queue<pair<string,int>> increment;
         queue<Instruction*> instructions_cf;
+        Evaluator evaluator;
         cf ()
         {
 
