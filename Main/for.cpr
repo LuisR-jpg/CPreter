@@ -8,11 +8,9 @@ cf c: 1, 0
     fp "eke"
 cf d: 0, 3, 1
     fp "Ingresa: "
-    fr s
     fp s
 cf e: 0, 3
     fp "Dos: "
-    fr s
     fp s
 cf e: 10
     cf f: 10

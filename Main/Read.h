@@ -9,15 +9,18 @@ class Read
       //name = "test.cpr";
       //name = "lectura.cpr";
       //name = "if.cpr";
-      name = "for.cpr";
+      //name = "for.cpr";
+      name = "while.cpr";
       ifstream file;
       string a, b;
       file.open(name, ios::in);
       if(file.fail()){
-	cout << "Agh, chale"; 
-	return "";
+        cout << "Agh, chale"; 
+        exit(0);
       }
       while(!file.eof()) getline(file, a), a += "\n", b += a;
-      return b;
+      int esp = b.size() - 1;
+      while(isspace(b[esp--]));
+      return b.substr(0, 2 + esp) + '\n';
     }
 };

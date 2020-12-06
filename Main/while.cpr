@@ -1,0 +1,6 @@
+fp "jajaj"
+di n = 0
+cw n <= 5
+    n = n + 1
+    fp n
+fp "adio"                                 

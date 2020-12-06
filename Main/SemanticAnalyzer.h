@@ -158,5 +158,14 @@ void cf::run()
 }
 void cw::run()
 {
-    return;
+    while(evaluator.evaluate(replace(t_expresion)))
+    {
+        for(int i = 0; i < instructions_cw.size(); i++)
+        {
+            auto inst = instructions_cw.front();
+            inst -> run();
+            instructions_cw.push(inst);
+            instructions_cw.pop();
+        }
+    }
 }

@@ -231,7 +231,7 @@ class cf: public Instruction
 class cw: public Instruction
 {
     public:
-        //Expresion expresion;
+        Evaluator evaluator;
         queue<pair<string,int>> t_expresion;
         queue<Instruction*> instructions_cw;
         cw()
