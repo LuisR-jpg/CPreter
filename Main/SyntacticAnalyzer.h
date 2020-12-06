@@ -45,7 +45,10 @@ class SyntacticAnalyzer
             {
                 front_t = tokens.front();
                 tokens.pop();
-                if(tokens.front().second == 60) cout << "Indentation error" << endl, exit(34404);
+                if(tokens.front().second == 60){
+                    cout << "\tSYNTACTIC ERROR: Indentation error" << endl;
+                    exit(0);
+                }
                 if(front_t.second == 61) continue;
                 if((front_t.second == 10 && tokens.front().second == 0) || (front_t.first == "," && last_type.second == 10))///Declaration ------ Listo
                 {
@@ -58,12 +61,18 @@ class SyntacticAnalyzer
                 }
                 if(tokens.front().first == "=" || front_t.first == "=")///Assignment ------ Listo
                 {
-                    if(front_t.first == "=") cout << "Assignment Error" << endl, exit(34404);
+                    if(front_t.first == "="){
+                        cout << "\tSYNTACTIC ERROR: Assignment Error";
+                        exit(0);
+                    }
                     queue<pair<string,int>> t_expresion;
                     string name;
                     Assignment* a = new Assignment;
                     if(front_t.second == 0) name = front_t.first;
-                    else cout << "Assignment Error" << endl, exit(34404);
+                    else{
+                        cout << "\tSYNTACTIC ERROR: Assignment Error";
+                        exit(0);
+                    }
                     front_t = tokens.front();
                     tokens.pop();
                     while((tokens.front().second >= 31 && tokens.front().second <= 54) || tokens.front().second == 0)
@@ -163,7 +172,11 @@ class SyntacticAnalyzer
                             }
                             continue;
                         }
-                        else if(i == 2 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
+                        else if(i == 2 && !(front_t.second == 0 || front_t.second == 50))
+                        {
+                            cout << "\tSYNTACTIC ERROR: Value Error";
+                            exit(0);
+                        }
                         if(i == 3 && front_t.first == ",") continue;
                         else if(i == 3 && front_t.second == 61) break;
                         if(i == 4 && (front_t.second == 0 || front_t.second == 50))
@@ -178,7 +191,11 @@ class SyntacticAnalyzer
                             }
                             continue;
                         }
-                        else if(i == 4 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
+                        else if(i == 4 && !(front_t.second == 0 || front_t.second == 50))
+                        {
+                            cout << "\tSYNTACTIC ERROR: Value Error";
+                            exit(0);
+                        }
                         if(i == 5 && front_t.first == ",") continue;
                         else if(i == 5 && front_t.second == 61) break;
                         if(i == 6 && (front_t.second == 0 || front_t.second == 50))
@@ -194,8 +211,15 @@ class SyntacticAnalyzer
                             }
                             continue;
                         }
-                        else if(i == 6 && !(front_t.second == 0 || front_t.second == 50)) cout << "Value error" << endl, exit(34404);
-                        else cout << "Syntax error" << endl, exit(34404);
+                        else if(i == 6 && !(front_t.second == 0 || front_t.second == 50))
+                        {
+                            cout << "\tSYNTACTIC ERROR: Value Error";
+                            exit(0);
+                        }
+                        else{
+                            cout << "\tSYNTACTIC ERROR: Syntax Error";
+                            exit(0);
+                        }
                     }
                     cf* f = new cf;
                     if(aux == 1) f -> insert(name,initial_value);

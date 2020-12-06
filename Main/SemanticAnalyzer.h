@@ -113,7 +113,7 @@ void fr::run()
 {
     if(SymbolTable.find(name) == SymbolTable.end())
     {
-        cout << "Trying to read in non-declarated variable.";
+        cout << "\tSEMANTIC ERROR: Trying to read in non-declarated variable.";
         exit(0);
     }
     Assignment a;

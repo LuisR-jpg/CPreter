@@ -71,8 +71,8 @@ class LexicalAnalyzer
                     if(!intodouble && pun == 1) insert(aux, 51);//51 = valor decimal
                     else if(pun>1)
                     {
-                        cout << "Error" << endl;
-                        exit(34404);
+                        cout << "\tLEXICAL ERROR: Extra periods were found in expression." << endl;
+                        exit(0);
                     }
                     else insert(aux, 50);//50 = valor entero
                     aux = "";

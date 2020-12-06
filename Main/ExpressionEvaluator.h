@@ -17,16 +17,6 @@ class Evaluator
     Evaluator(queue<pair<string, int>> expression): expression(expression)
     {
       fillPriority();
-      ///DEBUG
-      int n = expression.size();
-      for(int i = 0; i < n; i++){
-        auto a = expression.front();
-        cout << a.first << " ";
-        expression.pop();
-        expression.push(a);
-      }
-      cout << endl;
-      ///DEBUG
     }
     void fillPriority()
     {
@@ -73,24 +63,7 @@ class Evaluator
     }
     double evaluate()
     {
-      /*
-      ///DEBUG
-      cout << "\t\t\tjola" << endl;
-      ///DEBUG
-      */
       prepare();
-      /*
-      ///DEBUG
-      int n = expression.size();
-      for(int i = 0; i < n; i++){
-        auto a = expression.front();
-        cout << a.first << " ";
-        expression.pop();
-        expression.push(a);
-      }
-      cout << endl;
-      ///DEBUG
-      */
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
       while(expression.size())
@@ -113,18 +86,16 @@ class Evaluator
       }
       while(sta.size())
       {
-        if(sta.top().first == "(" || sta.top().first == ")") cout << "F"; //Need to be handled
+        if(sta.top().first == "(" || sta.top().first == ")"){
+          cout << "\tERROR: Expression Mismatch.";
+          exit(0);
+        }
         out.push(sta.top()), sta.pop();
       }
       stack<double> res;
       while(out.size())
       {
         auto a = out.front();
-        /*
-        ///DEBUG
-        cout << a.first << " ";
-        ///DEBUG
-        */
         if(a.second >= 50 && a.second <= 60) res.push(stod(a.first));
         else
         {
@@ -152,11 +123,6 @@ class Evaluator
         }
         out.pop();
       }
-      /*
-      ///DEBUG
-      cout << endl;
-      ///DEBUG
-      */
       return res.top();
     }
 };

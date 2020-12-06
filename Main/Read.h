@@ -17,7 +17,7 @@ class Read
       string a, b;
       file.open(name, ios::in);
       if(file.fail()){
-        cout << "Agh, chale"; 
+        cout << "\tERROR: There's been a problem while trying to read the CPR file."; 
         exit(0);
       }
       while(!file.eof()) getline(file, a), a += "\n", b += a;

@@ -1,4 +1,3 @@
-//#include "SyntacticAnalyzer.h"
 #include "SemanticAnalyzer.h"
 bool debug;
 void CPreter(string filename)
@@ -18,7 +17,7 @@ void CPreter(string filename)
 int main(int argc, char** argv)
 {
     debug = argc > 2;
-    if(argc < 2) cout << "Please enter file name.";
+    if(argc < 2) cout << "\tERROR: Please enter file name.";
     else CPreter(argv[1]);
     return 0;
 }
