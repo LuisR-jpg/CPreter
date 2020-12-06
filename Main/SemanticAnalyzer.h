@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 map<string, pair<string, void*>> SymbolTable;
+extern bool debug;
 queue<pair<string, int>> replace(queue<pair<string, int>> q)
 {
     int n = q.size();
@@ -60,28 +61,38 @@ void Assignment::run()
 {
     auto a = t_expresion.front();
     auto var = SymbolTable[name];
-    cout << "\t\t\t\t\t" << name << ": ";
-    if(var.first == "ds") var.second = new string(a.first), 
-        cout << *((string*)var.second);
-    else if(var.first == "dc") var.second = new char(a.first[0]),
-        cout << *((char*)var.second);
+    if(debug) cout << "\t\t\t\t\t" << name << ": ";
+    if(var.first == "ds"){
+        var.second = new string(a.first);
+        if(debug) cout << *((string*)var.second);
+    }
+    else if(var.first == "dc"){
+        var.second = new char(a.first[0]);
+        if(debug) cout << *((char*)var.second);
+    }
     else
     {
         double c = evaluator.evaluate(replace(t_expresion));
-        if(var.first == "db") var.second = new bool(c),
-            cout << *((bool*)var.second);
-        if(var.first == "di") var.second = new int(c), 
-            cout << *((int*)var.second);
-        if(var.first == "dd") var.second = new double(c),
-            cout << *((double*)var.second);
+        if(var.first == "db"){
+            var.second = new bool(c);
+            if(debug) cout << *((bool*)var.second);
+        }
+        if(var.first == "di"){
+            var.second = new int(c);
+            if(debug) cout << *((int*)var.second);
+        }
+        if(var.first == "dd"){
+            var.second = new double(c);
+            if(debug) cout << *((double*)var.second);
+        }
     }
     SymbolTable[name] = var;
-    cout << endl;
+    if(debug) cout << endl;
 }
 //////////////////MEJORAAAAAAAAAAAAAAAAAAR
 void fp::run()
 {
-    cout << "\t\t\t\t\t...";
+    if(debug) cout << "\t\t\t\t\t...";
     auto a = t_expresion.front();
     if(t_expresion.size() == 1)
     {

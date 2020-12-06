@@ -4,24 +4,28 @@
 #include <vector>
 #include <queue>
 using namespace std;
+extern bool debug;
 class SyntacticAnalyzer
 {
     public:
-        LexicalAnalyzer a;
         queue<pair<string,int>> tokens;
         queue<Instruction*> instruction;
         vector<pair<string,int>> token;
-        SyntacticAnalyzer()
+        SyntacticAnalyzer(string file)
         {
+            LexicalAnalyzer a(file);
             this -> token = a.getToken();
-            ///DEBUG
-            cout << "\t----------LEXICAL----------" << endl;
-            for(int i = 0; i < token.size(); i++){
-                auto b = token[i];
-                cout << b.first << " " << b.second << endl;
+            if(debug)
+            {
+                ///DEBUG
+                cout << "\t----------LEXICAL----------" << endl;
+                for(int i = 0; i < token.size(); i++){
+                    auto b = token[i];
+                    cout << b.first << " " << b.second << endl;
+                }
+                cout << "\t----------LEXICAL----------" << endl << endl;
+                ///DEBUG
             }
-            cout << "\t----------LEXICAL----------" << endl << endl;
-            ///DEBUG
             for(int i = 0; i < token.size(); i++)
                 tokens.push(token[i]);
             this -> instruction = instructions(tokens);

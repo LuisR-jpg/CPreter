@@ -11,10 +11,10 @@ class LexicalAnalyzer
         vector<pair<string,int>> token;
         set<string> type;
         set<string> instruction;
-        LexicalAnalyzer()
+        LexicalAnalyzer(string file)
         {
             Read r;
-            code = r.getCode();
+            code = r.getCode(file);
         }
         vector<pair<string, int>> getToken()
         {

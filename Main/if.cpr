@@ -1,5 +1,5 @@
 dd a = 4.9
-si a < 5
+si a > 5
     fp "Si"
 se 
     fp "No"
