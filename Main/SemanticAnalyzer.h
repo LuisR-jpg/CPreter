@@ -51,7 +51,7 @@ void Declaration::run()
 {
     if(SymbolTable.find(name) != SymbolTable.end())
     {
-        cout << "Variable Repetida..." << endl;
+        cout << "\tSEMANTIC ERROR: Variable name already used." << endl;
         exit(0);
     }
     void *pointer;
@@ -133,7 +133,6 @@ void fr::run()
     q.push(make_pair(s, t));
     a.insert(name, q);
     a.run();    
-    
 }
 void si::run()
 {
