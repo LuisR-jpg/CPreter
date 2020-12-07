@@ -3,14 +3,16 @@ ds s
 dc c
 fr s, c
 fp s,c*10, c
-di a
-a = 5
-fp a, a/5, a <= 10, 'a', a < 0
-di hola 
-hola = 92
-fp hola
-fr hola
-fp hola
+di i
+i = 5
+fp i
+fr i
+fp i, i/5, i <= 10, 'i', i < 0
+dd d 
+fr d
+fp d
+db b
+fr b
+fp b 
 s = "Fin del programa"
 fp s
-si a <= 10
