@@ -59,7 +59,7 @@ class SyntacticAnalyzer
                     tokens.pop();
                     instruction.push(d);
                 }
-                if(tokens.front().first == "=" || front_t.first == "=")///Assignment ------ Listo
+                if((tokens.front().first == "=" && tokens.front().second == 30) || (front_t.first == "=" && front_t.second == 30))///Assignment ------ Listo
                 {
                     if(front_t.first == "="){
                         cout << "\tSYNTACTIC ERROR: Assignment Error";
@@ -80,7 +80,7 @@ class SyntacticAnalyzer
                     a -> insert(name,t_expresion);
                     instruction.push(a);
                 }
-                if((front_t.first == "fr" && tokens.front().second == 0) || (front_t.first == "," && last_type.first == "fr"))///Read ------- Listo
+                if(((front_t.first == "fr" && front_t.second == 20) && tokens.front().second == 0) || (front_t.first == "," && last_type.first == "fr"))///Read ------- Listo
                 {
                     fr* r = new fr;
                     if(front_t.second == 20) last_type = front_t;
@@ -89,7 +89,7 @@ class SyntacticAnalyzer
                     tokens.pop();
                     instruction.push(r);
                 }
-                if(front_t.first == "fp" || (front_t.first == "," && last_type.first == "fp"))///Print ------ Listo
+                if((front_t.first == "fp" && front_t.second == 20) || (front_t.first == "," && last_type.first == "fp"))///Print ------ Listo
                 {
                     queue<pair<string,int>> t_expresion;
                     fp* p = new fp;
@@ -99,7 +99,7 @@ class SyntacticAnalyzer
                     p -> insert(t_expresion);
                     instruction.push(p);
                 }
-                if(front_t.first == "si")///If ------ Listo?
+                if(front_t.first == "si" && front_t.second == 20)///If ------ Listo?
                 {
                     si* sif = new si;
                     queue<pair<string,int>> t_expresion;
@@ -121,7 +121,7 @@ class SyntacticAnalyzer
                     }
                     front_t = tokens.front();
                     sif -> insert_instruction_si(instructions(tokens_i));
-                    if(front_t.first == "se")
+                    if(front_t.first == "se" && front_t.second == 20)
                     {
                         while(!tokens_i.empty())
                             tokens_i.pop();
@@ -141,7 +141,7 @@ class SyntacticAnalyzer
                     }
                     instruction.push(sif);
                 }
-                if(front_t.first == "cf")///For ------ Listo?
+                if(front_t.first == "cf" && front_t.second == 20)///For ------ Listo?
                 {
                     string name;
                     int aux;
@@ -240,7 +240,7 @@ class SyntacticAnalyzer
                     f -> insert_instruction_cf(instructions(tokens_i));
                     instruction.push(f);
                 }
-                if(front_t.first == "cw")///While ------ Listo?
+                if(front_t.first == "cw" && front_t.second == 20)///While ------ Listo?
                 {
                     cw* w = new cw;
                     queue<pair<string,int>> t_expresion;

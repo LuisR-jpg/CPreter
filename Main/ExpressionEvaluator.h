@@ -47,7 +47,7 @@ class Evaluator
         {
           if(s != "")
           {
-            if(last.second >= 50 && last.second <= 60) expression.push(make_pair(s, 32));
+            if(last.first == ")" || (last.second >= 50 && last.second <= 60)) expression.push(make_pair(s, 32));
             else tok.first = s + tok.first;
           }
           s = "", last = tok;
@@ -69,7 +69,7 @@ class Evaluator
       for(int i = 0; i < expression.size(); i++)
       {
         auto a = expression.front();
-        cout << a.first << ": " << a.second << " ";
+        cout << a.first << ": " << a.second << " " << endl;
         expression.push(a);
         expression.pop();
       }
@@ -84,7 +84,12 @@ class Evaluator
         else if(i.first == "(") sta.push(i);
         else if(i.first == ")")
         {
-          while(sta.top().first != "(") out.push(sta.top()), sta.pop();
+          while(sta.size() && sta.top().first != "(") out.push(sta.top()), sta.pop();
+          if(sta.empty())
+          {
+            cout << "\tERROR: Expression Mismatch.";
+            exit(0);
+          }
           sta.pop();
         }
         else

@@ -1,0 +1,15 @@
+fp "Piensa en un numero del 0 al 1000"
+di numero = 500, ini = 0, fin = 1000
+db adivine = 0, may
+cw !adivine
+    numero = (ini + fin)/2
+    fp "El numero que pensaste es: ", numero, "?"
+    fr adivine
+    si !adivine
+        fp "El numero que piensas es mayor?"
+        fr may
+        si may
+            ini = numero
+        se 
+            fin = numero
+fp "I won"

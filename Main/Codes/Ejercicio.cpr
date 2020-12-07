@@ -1,0 +1,7 @@
+di a, b
+a = 10
+b = 200
+si (a >= 10 || b <= 100)
+    fp "cw", "si", "=", "si", "se", "cf", "fr", "fp", "*"
+se 
+    fp "no"

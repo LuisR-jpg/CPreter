@@ -1,17 +1,3 @@
-ds s = "holajaja"
-fp s
-cf a:0,1,1 
-    fp "aki"
-cf b: 0, 2, 5
-    fp "aka"
-cf c: 1, 0
-    fp "eke"
-cf d: 0, 3, 1
-    fp "Ingresa: "
-    fp s
-cf e: 0, 3
-    fp "Dos: "
-    fp s
-cf e: 10
-    cf f: 10
-        fp e
+cf n: 2, 10, 2
+    fp n
+    

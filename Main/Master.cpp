@@ -5,6 +5,7 @@ void CPreter(string filename)
     SyntacticAnalyzer s(filename);
     while(s.instruction.size())
     {
+        //cout << "Instrucciones: ";
         auto a = s.instruction.front();
         if(debug){
             a -> print("    ");
@@ -12,6 +13,7 @@ void CPreter(string filename)
         }
         a -> run();
         s.instruction.pop();
+
     }
 }
 int main(int argc, char** argv)
