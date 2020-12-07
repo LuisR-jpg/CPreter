@@ -119,6 +119,8 @@ void fr::run()
     Assignment a;
     queue<pair<string, int>> q;
     string type = SymbolTable[name].first, s;
+    int t;
+    /*
     double d, t;
     if(type == "ds" || type == "dc") 
     {
@@ -129,6 +131,55 @@ void fr::run()
     {
         cin >> d;
         t = (type == "di"? 50: (type == "dd"? 51: 52)), s = to_string(d);
+    }
+    */
+    cin >> s;
+    if(type == "ds") t = 53;
+    if(type == "dc")
+    {
+        if(s.size() > 1)
+        {
+            cout << "\tSEMANTIC ERROR: Error while reading. DC was expected";
+            exit(0);
+        }
+        t = 54;
+    }
+    if(type == "db")
+    {
+        if(s == "true") s = "1";
+        if(s == "false") s = "0";
+        if(s == "1" || s == "0") t = 52;
+        else
+        {
+            cout << "\tSEMANTIC ERROR: Error while reading. DB was expected";
+            exit(0);
+        }
+    }
+    if(type == "di")
+    {
+        try
+        {
+            int i = stoi(s);
+            t = 50;
+        }
+        catch(...)
+        {
+            cout << "\tSEMANTIC ERROR: Error while reading. DI was expected";
+            exit(0);
+        }
+    }
+    if(type == "dd")
+    {
+        try
+        {
+            double d = stod(s);
+            t = 51;
+        }
+        catch(...)
+        {
+            cout << "\tSEMANTIC ERROR: Error while reading. DD was expected";
+            exit(0);
+        }
     }
     q.push(make_pair(s, t));
     a.insert(name, q);
