@@ -64,6 +64,17 @@ class Evaluator
     double evaluate()
     {
       prepare();
+      /*
+      cout << endl;
+      for(int i = 0; i < expression.size(); i++)
+      {
+        auto a = expression.front();
+        cout << a.first << ": " << a.second << " ";
+        expression.push(a);
+        expression.pop();
+      }
+      cout << endl;
+      */
       stack<pair<string, int>> sta;
       queue<pair<string, int>> out;
       while(expression.size())
@@ -96,6 +107,7 @@ class Evaluator
       while(out.size())
       {
         auto a = out.front();
+        if(a.second == 54) a.first = to_string((int)a.first[0]);
         if(a.second >= 50 && a.second <= 60) res.push(stod(a.first));
         else
         {

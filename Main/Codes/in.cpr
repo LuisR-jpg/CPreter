@@ -1,6 +1,6 @@
 fp "Inicio del programa"
-dll a = -5
-dll c = 100
+di a = -5
+di c = 100
 di b = 10 >= (9/2 - 3*2)*2 && 5 + 9 <= 8 / 2
 fp "Al centro del programa"
 cf n:11,1,2
