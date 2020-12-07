@@ -6,13 +6,6 @@ class Read
   public: 
     Read(){}
     string getCode(string name = "in.cpr"){
-      //name = "test.cpr";
-      //name = "lectura.cpr";
-      //name = "if.cpr";
-      //name = "si.cpr";
-      //name = "for.cpr";
-      //name = "while.cpr";
-      //name = "error.cpr";
       ifstream file;
       string a, b;
       file.open(name, ios::in);
