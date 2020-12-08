@@ -23,6 +23,11 @@ queue<pair<string, int>> replace(queue<pair<string, int>> q)
         auto tok = q.front();
         if(!tok.second)
         {
+            if(SymbolTable.find(tok.first) == SymbolTable.end())
+            {
+                cout << "\tERROR. Trying to evaluate a non-declarated variable.";
+                exit(0);
+            }
             auto var = SymbolTable[tok.first];
             if(var.first == "di") tok = make_pair(to_string(*((int*)var.second)), 50);
             if(var.first == "dd") tok = make_pair(to_string(*((double*)var.second)), 51);
@@ -59,6 +64,11 @@ void Declaration::run()
 }
 void Assignment::run()
 {
+    if(SymbolTable.find(name) == SymbolTable.end())
+    {
+        cout << "\tERROR. Trying to assing to non-declarated variable.";
+        exit(0);
+    }
     auto a = t_expresion.front();
     auto var = SymbolTable[name];
     if(debug) cout << "\t\t\t\t\t" << name << ": ";

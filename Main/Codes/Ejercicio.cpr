@@ -1,5 +1,5 @@
 di a, b
 a = 1000 + 2
 b = 200
-cf n: 10
-    fp "holos"
+cw n <= 5
+    fp "jaja"
