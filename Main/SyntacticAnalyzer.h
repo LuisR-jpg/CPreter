@@ -79,6 +79,7 @@ class SyntacticAnalyzer
                         t_expresion.push(tokens.front()), front_t = tokens.front(), tokens.pop();
                     a -> insert(name,t_expresion);
                     instruction.push(a);
+                    if(tokens.empty()) return instruction;
                 }
                 if(((front_t.first == "fr" && front_t.second == 20) && tokens.front().second == 0) || (front_t.first == "," && last_type.first == "fr"))///Read ------- Listo
                 {
@@ -98,6 +99,7 @@ class SyntacticAnalyzer
                         t_expresion.push(tokens.front()), front_t = tokens.front(), tokens.pop();
                     p -> insert(t_expresion);
                     instruction.push(p);
+                    if(tokens.empty()) return instruction;
                 }
                 if(front_t.first == "si" && front_t.second == 20)///If ------ Listo?
                 {
@@ -140,6 +142,7 @@ class SyntacticAnalyzer
                         sif -> insert_instruction_se(instructions(tokens_i));
                     }
                     instruction.push(sif);
+                    if(tokens.empty()) return instruction;
                 }
                 if(front_t.first == "cf" && front_t.second == 20)///For ------ Listo?
                 {
@@ -239,6 +242,7 @@ class SyntacticAnalyzer
                     front_t = tokens.front();
                     f -> insert_instruction_cf(instructions(tokens_i));
                     instruction.push(f);
+                    if(tokens.empty()) return instruction;
                 }
                 if(front_t.first == "cw" && front_t.second == 20)///While ------ Listo?
                 {
@@ -263,6 +267,7 @@ class SyntacticAnalyzer
                     front_t = tokens.front();
                     w -> insert_instruction_cw(instructions(tokens_i));
                     instruction.push(w);
+                    if(tokens.empty()) return instruction;
                 }
             }
             return instruction;

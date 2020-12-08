@@ -1,7 +1,5 @@
 di a, b
-a = 10
+a = 1000 + 2
 b = 200
-si (a >= 10 || b <= 100)
-    fp "cw", "si", "=", "si", "se", "cf", "fr", "fp", "*"
-se 
-    fp "no"
+cf n: 10
+    fp "holos"
