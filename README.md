@@ -3,7 +3,7 @@
 ###### Have you ever wanted to code a quick idea? That's what CPreter was made for!
 
 ### How to code?
-In order to get started, you can run the next bunch of lines in charged of guessing a number you are thinking.
+In order to get started, you can run the next bunch of lines in charged of guessing a number you think.
 
     fp "Piensa en un numero del 0 al 1000"
     di numero = 500, ini = 0, fin = 1000
@@ -21,6 +21,7 @@ In order to get started, you can run the next bunch of lines in charged of guess
                 fin = numero
     fp "I won"
 
+For more information, refer yourself to the [syntax table]().
 
 
 ### How to use it?
