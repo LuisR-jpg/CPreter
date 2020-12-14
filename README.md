@@ -21,7 +21,7 @@ In order to get started, you can run the next bunch of lines in charged of guess
                 fin = numero
     fp "I won"
 
-For more information, refer yourself to the [syntax table]().
+For more information, refer yourself to the [syntax table](https://github.com/LuisR-jpg/CPreter/blob/main/Syntax%20Table.pdf).
 
 
 ### How to use it?
