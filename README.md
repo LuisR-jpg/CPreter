@@ -1,6 +1,6 @@
 # CPreter
-## Competitive Programming Interpreter
-### Have you ever wanted to code a quick idea? That's what CPreter was made for!
+##### Competitive Programming Interpreter
+###### Have you ever wanted to code a quick idea? That's what CPreter was made for!
 
 
 ###### How to use it?
