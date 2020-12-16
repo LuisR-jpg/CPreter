@@ -22,6 +22,7 @@ In order to get started, you can run the next bunch of lines in charged of guess
     fp "I won"
 
 For more information, refer yourself to the [syntax table](https://github.com/LuisR-jpg/CPreter/blob/main/Syntax%20Table.pdf).
+Or you can see more [examples](https://github.com/LuisR-jpg/CPreter/tree/main/Codes).
 
 
 ### How to run it?
