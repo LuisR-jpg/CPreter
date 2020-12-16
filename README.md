@@ -1,6 +1,9 @@
 # CPreter
 ##### Competitive Programming Interpreter
 ###### Have you ever wanted to code a quick idea? That's what CPreter was made for!
+### Description
+***CPreter*** is an interpreter developed in C++ focused on helping you to implement some quick ideas to see if they're going to work, it increases your typing speed because of its minimalist syntax and it has the basic structures and data types every language needs to have a solid start.
+Give it a try!
 
 ### How to code?
 In order to get started, you can run the next bunch of lines in charged of guessing a number you think.
