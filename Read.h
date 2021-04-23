@@ -13,7 +13,7 @@ class Read
         cout << "\tERROR: There's been a problem while trying to read the CPR file."; 
         exit(0);
       }
-      while(!file.eof()) getline(file, a), a += "\n", b += a;
+      while(getline(file, a)) a += "\n", b += a;
       int esp = b.size() - 1;
       while(isspace(b[esp--]));
       return b.substr(0, 2 + esp) + '\n';

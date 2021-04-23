@@ -1,0 +1,5 @@
+di t, a, b
+fr t
+cf i: 1, t
+    fr a, b
+    fp a + b

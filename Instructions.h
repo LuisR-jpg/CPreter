@@ -9,6 +9,7 @@ class Instruction
         Instruction(){}
         virtual void run() = 0;
         virtual void print(string s) = 0;
+        virtual string translate(string s) = 0;
 };
 
 class Declaration: public Instruction
@@ -35,6 +36,16 @@ class Declaration: public Instruction
         {
             cout << type << " " << name;
         }
+        string translate(string s){
+            string r;
+            if(type == "di") r = "int";
+            if(type == "db") r = "bool";
+            if(type == "dd") r = "double";
+            if(type == "dc") r = "char";
+            if(type == "ds") r = "string";
+            r += " " + name + ";\n";
+            return r;
+        }
         void run();
 };
 
@@ -60,6 +71,15 @@ class Assignment: public Instruction
             while(!aux.empty())
                 cout << aux.front().first, aux.pop();
         }
+        string translate(string s){
+            string r;
+            r = name + " = ";
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += ";\n";
+            return r;
+        }
         void run();
 };
 
@@ -79,6 +99,19 @@ class fp: public Instruction
             queue<pair<string,int>> aux = t_expresion;
             while(!aux.empty())
                 cout << aux.front().first, aux.pop();
+        }
+        string translate(string s){
+            string r;
+            r = "cout << ";
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+            {
+                if(aux.front().second == 53) r += "\"" + aux.front().first + "\"";
+                else r += aux.front().first;
+                aux.pop();
+            }
+            r += " << endl;\n";
+            return r;
         }
         void run();
 };
@@ -102,6 +135,11 @@ class fr: public Instruction
         void print(string s)
         {
             cout << "fr " << name;
+        }
+        string translate(string s){
+            string r;
+            r = "cin >> " + name + ";\n";
+            return r;
         }
         void run();
 };
@@ -157,6 +195,32 @@ class si: public Instruction
                     //cout << s << "Instruccion se: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_si.size() ? cout << endl : cout << "");
                     cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_se.size() ? cout << endl : cout << "");
             }
+        }
+        string translate(string s){
+            string r;
+            int nl = 0;
+            r = "if(";
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += ")\n{\n";
+            queue<Instruction*> aux2 = instructions_si;
+            while(!aux2.empty())
+                //cout << s << "Instruccion si: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_si.size() ? cout << endl : cout << "");
+                r += s, r += aux2.front() -> translate(s+"    "), aux2.pop(), r += (++nl != instructions_si.size() ? "\n" : "");
+            r += "\n}";
+            if(!instructions_se.empty())
+            {
+                nl = 0;
+                aux2 = instructions_se;
+                r += "\nelse\n{\n";
+                while(!aux2.empty())
+                    //cout << s << "Instruccion se: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_si.size() ? cout << endl : cout << "");
+                    r += s, r += aux2.front() -> translate(s+"    "), aux2.pop(), r += (++nl != instructions_si.size() ? "\n" : "");
+                r += "\n}";
+            }
+            r += "\n";
+            return r;
         }
         void run();
 };
@@ -225,6 +289,28 @@ class cf: public Instruction
                 //cout << s << "Instruccion cf: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cf.size() ? cout << endl : cout << "");
                 cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cf.size() ? cout << endl : cout << "");
         }
+        string translate(string s){
+            string r;
+            int nl = 0;
+            r += "for(" + name + " = ";
+            queue<pair<string,int>> aux = inital_value;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += "; " + name + " <= ";
+            aux = final_value;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += "; " + name + " += ";
+            aux = increment;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += ")\n{\n";
+            queue<Instruction*> aux2 = instructions_cf;
+            while(!aux2.empty())
+                r += s, r += aux2.front() -> translate(s+"    "), aux2.pop(), r += (++nl != instructions_cf.size() ? "\n" : "");
+            r += "\n}\n";
+            return r;
+        }
         void run();
 };
 
@@ -264,6 +350,20 @@ class cw: public Instruction
             while(!aux2.empty())
                 //cout << s << "Instruccion cw: ", aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cw.size() ? cout << endl : cout << "");
                 cout << s, aux2.front() -> print(s+"    "), aux2.pop(), (++nl != instructions_cw.size() ? cout << endl : cout << "");
+        }
+        string translate(string s){
+            string r;
+            int nl = 0;
+            r += "while(";
+            queue<pair<string,int>> aux = t_expresion;
+            while(!aux.empty())
+                r += aux.front().first, aux.pop();
+            r += ")\n{\n";
+            queue<Instruction*> aux2 = instructions_cw;
+            while(!aux2.empty())
+                r += s, r += aux2.front() -> translate(s+"    "), aux2.pop(), r += (++nl != instructions_cw.size() ? "\n" : "");
+            r += "\n}";
+            return r;
         }
         void run();
 };
